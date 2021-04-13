@@ -838,7 +838,7 @@ console.log(obj.getName());
 
 >> [Background Reading: Arrow functions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
-If you have a function that will often be called in a way that loses its `this` context, it can make sense to use an arrow function property instead of a method definition:
+만약 자주 이러한 `this` 관련 문제를 겪는는 함수를 갖고 있다면, 애로우 함수를 사용하는 것이 의미가 있다:
 
 ```ts
 class MyClass {
@@ -853,15 +853,15 @@ const g = c.getName;
 console.log(g());
 ```
 
-This has some trade-offs:
- * The `this` value is guaranteed to be correct at runtime, even for code not checked with TypeScript
- * This will use more memory, because each class instance will have its own copy of each function defined this way
- * You can't use `super.getName` in a derived class, because there's no entry in the prototype chain to fetch the base class method from
+이것은 몇가지 트레이트-오프가 있다:
+ * `this` 값은 실행시 정확한 값을 갖는 것이 보장된다, 타입스크립트가 체크하지 않는 경우라 하더라도 그렇다.
+ * 이 방법은 메모리를 더 사용할 것이다, 왜냐하면 이 방식으로 정의된 각 함수는 자신의 복사본을 각 클래스마다 갖게되기 때문이다.
+ * 상속된 클래스에서 `super.getName`를 사용할 수 없다, 왜냐하면 베이스 클래스로부터 프로퍼티 체인을 가져오는 입구가 없기 때문이다.
 
 ### `this` parameters
 
-In a method or function definition, an initial parameter named `this` has special meaning in TypeScript.
-These parameters are erased during compilation:
+메소드나 함수에서, 타압스크립트에서는 초기화 파라메터에 `this`라는 이름은 특별한 의미가 있다.
+이러한 파라메터는 컴파일 하는 동안에 지워진다.
 
 ```ts
 type SomeType = any
@@ -878,8 +878,8 @@ function fn(x) {
 }
 ```
 
-TypeScript checks that calling a function with a `this` parameter is done so with a correct context.
-Instead of using an arrow function, we can add a `this` parameter to method definitions to statically enforce that the method is called correctly:
+타입스크립트는 `this` 파라메터를 가진 함수 호출이 올바른 환경에서 호출되었는지 체크한다.
+애로우 함수의 사용 대신에 우리는 `this` 파라메터를 메소드 정의에 추가하여 정적으로 그 메소드가 정확히 호출되었는지 확실히 할 수 있다:
 
 ```ts
 class MyClass {
@@ -897,15 +897,15 @@ const g = c.getName;
 console.log(g());
 ```
 
-This method takes the opposite trade-offs of the arrow function approach:
- * JavaScript callers might still use the class method incorrectly without realizing it
- * Only one function per class definition gets allocated, rather than one per class instance
- * Base method definitions can still be called via `super.`
+이 방법은 애로우 함수와는 정반대의 트레이드-오프를 가진다:
+ * 자바스크립트 호출자는 여전히 잘못된 호출을 깨닫지 못한 채 이 클래스 메소드를 사용할 수 있다
+ * 클래스 정의당 오직 하나의 함수만 할당된다, 클래스 인스턴스당 하나가 아니다.
+ * 베이스 메소드 정의는 여전히 `super.`를 통하여 접근이 가능하다.
 
 ## `this` Types
 
-In classes, a special type called `this` refers *dynamically* to the type of the current class.
-Let's see how this is useful:
+클레스에서, 특별한 타입인 `this`는 *동적으로* 현재 클래스의 타입을 지칭한다.
+이것이 어떻게 유용한지 다음을 보자:
 
 ```ts
 class Box {
@@ -918,8 +918,8 @@ class Box {
 }
 ```
 
-Here, TypeScript inferred the return type of `set` to be `this`, rather than `Box`.
-Now let's make a subclass of `Box`:
+여기서, 타입스크립트는 `set`의 반환 타입을 `Box`가 아닌 `this`가 되도록 한다.
+이제 `Box`의 상속 클래스를 만들어 보자:
 
 ```ts
 class Box {
@@ -941,7 +941,7 @@ const b = a.set("hello");
       ^?
 ```
 
-You can also use `this` in a parameter type annotation:
+`this`는 타입명시에서 파라메터 타입에도 사용 가능 하다:
 
 ```ts
 class Box {
@@ -952,7 +952,7 @@ class Box {
 }
 ```
 
-This is different from writing `other: Box` -- if you have a derived class, its `sameAs` method will now only accept other instances of that same derived class:
+이것은 `other: Box`라고 쓴 것과는 다르다 -- 상속된 클래스를 가진 경우라면, `sameAs` 메소드는 동일한 상속 클래스의 객체만을 받아들일 것이다:
 
 ```ts
 class Box {
@@ -973,9 +973,9 @@ derived.sameAs(base);
 
 ## Parameter Properties
 
-TypeScript offers special syntax for turning a constructor parameter into a class property with the same name and value.
-These are called *parameter properties* and are created by prefixing a constructor argument with one of the visibility modifiers `public`, `private`, `protected`, or `readonly`.
-The resulting field gets those modifier(s):
+타입스크립트는 생성자 파라메터를 동일한 이름과 값으로 클래스 프로퍼티가 되도록 해주는 특별한 문법을 제공한다.
+이것은 *파라메터 프로퍼티*라고 불리우며, `public`, `private`, `protected`, or `readonly`와 같은 가시성 수정자와 같이 생성자 아규먼트로 생성된다.
+결과로 만들어지는 필드는 이러한 수정자의 특성을 가진다:
 
 ```ts
 class A {
@@ -993,8 +993,8 @@ console.log(a.z);
 
 >> [Background reading: Class expressions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class)
 
-Class expressions are very similar to class declarations.
-The only real difference is that class expressions don't need a name, though we can refer to them via whatever identifier they ended up bound to:
+클래스 식은 클래스 선언과 매우 유사하다.
+실질적인 차이는 클래스 식은 이름을 가질 필요가 없다는 것인데, 우리는 연관된 이름을 사용하여 그 클래스를 접근 하기 때문이다.
 
 ```ts
 const someClass = class<T> {
@@ -1010,15 +1010,16 @@ const m = new someClass("Hello, world");
 
 ## `abstract` Classes and Members
 
+클래스, 메소드, 필드는 *추상적* 일 수가 있다.
+
+어떤 *추상 메소드* 또는 *추상 필드*는 아직 구현이 제공되지 않은 것을 말한다.
+이러한 멤버들은 *추상 클래스*안에 존재하여야 하며, 이 추상 클래스는 직접적으로 객체를 만드는데 사용되어서는 안된다.
+
+추상 클래스의 목적은 베이스 클래스로서 존재하면서 상속되는 클래스가 구체적 구현을 하도록 하는데 있다.
+어떤 클래스가 추상 멤버가 하나도 없다면 그것은 *견고*하다고 말한다.
 Classes, methods, and fields in TypeScript may be *abstract*.
 
-An *abstract method* or *abstract field* is one that hasn't had an implementation provided.
-These members must exist inside an *abstract class*, which cannot be directly instantiated.
-
-The role of abstract classes is to serve as a base class for subclasses which do implement all the abstract members.
-When a class doesn't have any abstract members, it is said to be *concrete*.
-
-Let's look at an example
+예제를 보자:
 
 ```ts
 abstract class Base {
@@ -1032,8 +1033,8 @@ abstract class Base {
 const b = new Base();
 ```
 
-We can't instantiate `Base` with `new` because it's abstract.
-Instead, we need to make a derived class and implement the abstract members:
+우리는 `Base` 에다가 `new`를 사용하여 객체를 만들수 없다, 왜냐하면 추상 클래스 이기 때문이다.
+그대신, 상속 클래스를 만들어서 추상 멤버를 정의할 필요가 있다.
 
 ```ts
 abstract class Base {
@@ -1051,7 +1052,8 @@ const d = new Derived();
 d.printName();
 ```
 
-Notice that if we forget to implement the base class's abstract members, we'll get an error:
+만약 베이스 클래스의 추상 멤버를 구현하지 않을 경우, 에러가 출력된다는 것을 유의하라:
+
 ```ts
 abstract class Base {
   abstract getName(): string;
@@ -1059,15 +1061,15 @@ abstract class Base {
 }
 //cut
 class Derived extends Base {
-  // forgot to do anything
+  // 구현 하는 것을 잊어 버림
 }
 ```
 
 ### Abstract Construct Signatures
 
-Sometimes you want to accept some class constructor function that produces an instance of a class which derives from some abstract class.
+때때로 클래스 생성자가 추상 클래스로부터 상속받은 클래스를 사용하여 추상클래스의 인스턴스를 생성하기를 원하는 때가 있을 것이다.
 
-For example, you might want to write this code:
+예를 들어, 다음과 같은 코드를 작성하고 싶을 때가 있다:
 
 ```ts
 abstract class Base {
@@ -1082,8 +1084,8 @@ function greet(ctor: typeof Base) {
 }
 ```
 
-TypeScript is correctly telling you that you're trying to instantiate an abstract class.
-After all, given the definition of `greet`, it's perfectly legal to write this code, which would end up constructing an abstract class:
+타입스크립트는 정확히 이 코드는 추상 클래스를 인스턴스화 하고 있다고 알려줄 것이다.
+결국, 주어진 `greet` 정의는 완전히 적절하며, 추상 클래스를 사용하여 인스턴스를 생성하는 것으로 귀결될 것이다.
 
 ```ts
 declare const greet: any, Base: any;
@@ -1092,7 +1094,7 @@ declare const greet: any, Base: any;
 greet(Base);
 ```
 
-Instead, you want to write a function that accepts something with a construct signature:
+그대신, 생성자 시그니쳐를 가진 그 무엇을 받아들이는 함수를 작성하기 원한다면:
 
 ```ts
 abstract class Base {
@@ -1109,13 +1111,13 @@ greet(Derived);
 greet(Base);
 ```
 
-Now TypeScript correctly tells you about which class constructor functions can be invoked - `Derived` can because it's concrete, but `Base` cannot.
+이제 타입스크립트는 생성자 함수가 호출될 수 있음을 말해줄 것이다 - `Derived`는 콘크리트 이므로 가능하지만, `Base`는 불가능 하다.
 
 ## Relationships Between Classes
 
-In most cases, classes in TypeScript are compared structurally, the same as other types.
+대부분의 경우, 타입스크립트에서 클래스는 구조적으로 비교된다, 이것은 다른 타입도 마찬가지 이다.
 
-For example, these two classes can be used in place of each other because they're identical:
+예를 들어, 아래의 두 클래스는 완전히 동일하게 간주되므로 서로 위치를 바꾸어서 사용될 수 있다.
 
 ```ts
 class Point1 {
@@ -1132,7 +1134,7 @@ class Point2 {
 const p: Point1 = new Point2();
 ```
 
-Similarly, subtype relationships between classes exist even if there's no explicit inheritance:
+비슷하게, 상속이 명확히 선언되지 않은 경우 클래스 간의 서브 타이핑 관계도 마찬가지 이다.
 
 ```ts
 // @strict: false
@@ -1151,17 +1153,17 @@ class Employee {
 const p: Person = new Employee();
 ```
 
-This sounds straightforward, but there are a few cases that seem stranger than others.
+이것은 매우 직관적으로 들리지만, 다른 것과 다르게 약간 이상하게 보이는 경우도 몇가지 있다.
 
-Empty classes have no members.
-In a structural type system, a type with no members is generally a supertype of anything else.
-So if you write an empty class (don't!), anything can be used in place of it:
+빈 클래스는 멤버가 없는 것을 말한다.
+구조적 타입 시스템에서 멤버가 없는 타입은 일반적으로 어느 타입의 서브타입도 될수가 있다.
+따라서 빈 클래스를 사용한다면(하지말라!), 어떤 것도 그것을 대치할 수 있다:
 
 ```ts
 class Empty { }
 
 function fn(x: Empty) {
-  // can't do anything with 'x', so I won't
+  // 'x'룰 가지고 그 무어도 할수가 없다, 따라서 나는 안쓴다.
 }
 
 // All OK!
