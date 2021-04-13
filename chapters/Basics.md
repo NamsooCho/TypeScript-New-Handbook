@@ -2,51 +2,52 @@
 
 __toc__
 
-Each and every value in JavaScript has a set of behaviors you can observe from running different operations.
-That sounds abstract, but as a quick example, consider some operations we might run on a variable named `foo`.
+자바스크립트에서 모든 그리고 각각의 값은 일련의 행동들을 갖고 있다. 유저는 다른 동작을 실행하여 이러한 행동들을 관찰할 수 있다.
+이 말은 추상적으로 들릴 수 있어서 즉각적인 예를 들자면, `foo` 라는 이름의 변수에 대하여 다음의 동작들을 고려해 보자.
 
 ```js
-// accessing the property 'toLowerCase'
-// on 'foo' and then calling it
+// 프로퍼티 'toLowerCase'
+// 를 'foo' 에 대하여 접근하고 호출하는 경우
 foo.toLowerCase();
 
-// calling 'foo'
+// 'foo' 자체를 호출하는 경우
 foo();
 ```
 
-If we break this down, the first runnable line of code accesses a property called `toLowerCase` and then calls it.
-The second one tries to call `foo` directly.
+위의 코드를 상세히 들여다 보면, 첫 번째 실행문 라인은 `toLowerCase` 라는 이름의 프로퍼티를 접근하여 호출하는 것이다.
+두번째 것은 `foo` 를 직접적으로 호출하려고 시도하는 것이다.
 
-But assuming we don't know the value of `foo` - and that's pretty common - we can't reliably say what results we'll get from trying to run any of this code.
-The behavior of each operation depends entirely on what value we had in the first place.
-Is `foo` callable?
-Does it have a property called `toLowerCase` on it?
-And if it does, is `toLowerCase` callable?
-If all of these values are callable, what do they return?
-The answers to these questions are usually things we keep in our heads when we write JavaScript, and we have to hope we got all the details right.
+그러나 우리가 `foo` 의 값이 무언지 모른다고 가정한다면 - 그리고 이런 경우는 매우 흔한 일이다 - 우리는 이러한 코드를 실행한 결과가 무엇이 될지 신뢰성 있게 말할 수 없게 된다.
+각각의 동작의 행동은 맨처음 변수에 할당된 값에 따라서 완전히 달라진다.
+`foo`가 호출가능 한가?
+`toLowerCase` 라는 프로퍼티가 설정되어 있는가?
+만약 프로퍼터가 있다면 호출은 가능한 것인가?
+만약 이러한 모든 조건이 만족하여 모두 호출이 가능하다면 호출의 결과 값은 무엇이 될 것인가?
+이러한 질문들에 대한 답은 보통 우리가 자바스크립트를 사용하여 프로그래밍 할때 늘 머리속에 담고 있는 것이다.
+또한 이러한 모든 상세한 조건들이 모두 맞기를 바라면서 말이다.
 
-Let's say `foo` was defined in the following way.
+`foo`가 다음과 같이 정의되어 있다고 한다면
 
 ```js
 let foo = "Hello World!";
 ```
 
-As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the same string only in lower-case.
+아마도 당신이 추측할 수 있듯이, `foo.toLowerCase()` 를 실행한 경우, 소문자로 변환된 동일한 내용의 문자열을 얻게 될 것이다.
 
-What about that second line of code?
-If you're familiar with JavaScript, you'll know this fails with an exception:
+그렇다면 두번째 문장을 실행한 결과는 어떠할까?
+당신이 자바스크립트에 익숙하다면, 다음의 예외가 발생하면서 실패할 것을 알 것이다.
 
 ```txt
 TypeError: foo is not a function
 ```
 
-It'd be great if we could avoid mistakes like this.
-When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the *type* of the value - what sorts of behaviors and capabilities it has.
-That's part of what that `TypeError` is alluding to - it's saying that the string `"Hello World"` cannot be called as a function.
+만약 우리가 이와 같은 실수들을 피할 수 있다면 그것은 매우 좋은일 일 것이다.
+우리의 코드를 실행할 때, 자바스크립트 런타임은 값의 타압을 알아내어서 어떤 행동을 할 것인지 선택한다 - 어떤 종류의 행동들과 능력들을 그 값이 가지고 있는지 알아낸다.
+`TypeError`가 암시하는 것은 이러한 알아내는 과정의 결과이다 - 자바스크립트 런타임은 스트링 `"Hello World"` 는 함수로서 호출될 수 없다고 말하고 있다.
 
-For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
-But for other things like functions, there's no corresponding runtime mechanism to identify their types.
-For example, consider this function:
+몇몇 값들은, `string` 과 `number` 같은 기본 타입 값들은, 런타임에 `typeof` 연산자를 사용하여 그 타입을 알아낼 수 있다.
+그러나 함수와 같은 다른 것들은 런타임에 그 타입을 알수 있는 방법이 없다.
+예를 들어, 다음의 함수를 고려해 보자.
 
 ```js
 function fn(x) {
@@ -54,29 +55,29 @@ function fn(x) {
 }
 ```
 
-We can *observe* by reading the code that this function will only work if given an object with a callable `flip` property, but JavaScript doesn't surface this information in a way that we can check while the code is running.
-The only way in pure JavaScript to tell what `fn` does with a particular value is to call it and see what happens.
-This kind of behavior makes it hard to predict what code will do before it runs, which means it's harder to know what your code is going to do while you're writing it.
+우리는 이 함수의 코드를 읽어보고 나서, 이 함수는 `flip` 프로퍼티를 가진 객체에 대해서만 동작할 것이라는 것을 *관찰*할 수 있다. 그러나 자바스크립트는 이러한 정보를 코드가 실행하는 동안 우리한 체크할 수 있도록 밖으로 드러내지 않는다.
+순수 자바스크립트에서 이 함수가 특정 객체에 동작한다는 것을 확인 할 방법은 함수를 호출하고 그 결과를 관찰하는 방법 뿐이다.
+이러한 종류의 행동은 코드가 실행되기 전에 그 결과를 예측하기에 어렵게 만든다. 이 말의 의미는 코드를 작성할 당시에 이 코드의 실행결과를 알기가 어렵다는 것이다.
 
-Seen in this way, a *type* is the concept of describing which values are legal to pass to `fn` and which aren't legal.
-JavaScript only truly provides *dynamic* typing - running the code to see what happens.
+여기에서 볼 수 있듯이, *type* 이라는 개념은 특정 함수에 파라메터를 던질때 어떤 값이 옳고, 어떤 값이 옳지 않은지 기술해 준다.
+자바스크립트는 진정한 *동적타입* 이다 - 코드를 실행하고 무슨 일이 일어나는지 보는 벙삭이다.
 
-The alternative is to use a *static* type system to make predictions about what code is legal *before* it runs.
+이와 달리 *정적타입* 시스템은 코드가 실행되기 *전에* 무슨일이 일어날지 예측이 가능하게 해준다.
 
 ## Static type-checking
 
-Think back to that `TypeError` we got earlier from calling a `string`.
-*Most people* don't like to get any sorts of errors when running their code - those are considered bugs!
-And when we write new code, we try our best to avoid introducing new bugs.
+다시 뒤로 돌아가 `string`에 대하여 호출을 하여 얻은 `TypeError`에 대하여 생각해 보자.
+*대부분의 사람들*은 코드가 실행되면서 에러를 발견하게 되는 것을 좋아하지 않는다. - 이러한 에러들은 버그로 간주됟다.
+우리가 새로운 코드를 쓸때, 우리는 새로운 버그를 만들지 않으려고 최선을 다한다.
 
-If we add just a bit of code, save our file, refresh our app, and immediately see the error, we might be able to isolate the problem quickly; but that's not always the case.
-We might not have tested the feature thoroughly enough, so we might never actually run into a potential error that would be thrown!
-Or if we were lucky enough to witness the error, we might have ended up doing large refactorings and adding a lot of different code that we're forced to dig through.
+우리가 단지 소량의 코드를 추가하는 경우, 파일을 저장하고, 우리의 앱을 갱신하고, 그러면 즉시 우리는 에러를 보게된다. 우리는 즉시 문제가 무언지 알수 있을 것이다; 그러나 항상 이러한 경우만 있는 것이 아니다.
+우리는 추가한 기능을 충분히 테스트 하지 않았을 수도 있고, 따라서 잠재적 에러를 발견하지 못한채로 테스트 실행을 마칠 수 있다.
+또는 우리가 매우 운이 좋아서 이 에러를 발견했다면, 이 에러를 처리하고자 대량의 코드 리팩토링과 많은 양의 다른 코드를 추가로 작성해야 할지도 모른다.
 
-Ideally, we could have a tool that helps us find these bugs *before* our code runs.
-That's what a static type-checker like TypeScript does.
-*Static types systems* describe the shapes and behaviors of what our values will be when we run our programs.
-A type-checker like TypeScript uses that information and tells us when things might be going off the rails.
+이상적으로는, 우리의 코드가 실행되기 전에 이러한 버그를 발견하고 도와줄 수 있는 도구가 있다면 좋을 것이다.
+타입스크립트의 정적 타입체커가 바로 이러한 도구이다.
+*정적 타입 시스템*은 우리의 값들이 실행될 때의 모양과 행동을 기술한다.
+타입스크립트가 갖고 있는 타입 검사기는 그러한 타입 정보를 이용하여 실행시 문제가 될수 있는 것들을 컴파일 타임에 미리 말해 준다.
 
 ```ts
 let foo = "hello!";
@@ -84,16 +85,16 @@ let foo = "hello!";
 foo();
 ```
 
-Running that last sample with TypeScript will give us an error message before we run the code in the first place.
+위 문장은 타입스크립트가 코드가 실행되기 전에 에러가 있음을 우리에게 알려준다.
 
 ## Non-exception Failures
 
-So far we've been discussing certain things like runtime errors - cases where the JavaScript runtime throws its hands up and tells us that it thinks something is nonsensical.
-Those cases come up because [the ECMAScript specification](https://tc39.github.io/ecma262/) has explicit instructions on how the language should behave when it runs into something unexpected.
+지금까지 우리는 런타임 에러에 대하여 다루어 보았다 - 자바스크립트 런타임이 두손 들어버리고 무언가 의미가 맞지 않는다고 생각하는 경우들이다.
+이러한 경우들은 [the ECMAScript specification](https://tc39.github.io/ecma262/) 이 언어가 무언가 예상치 못한 경우에 봉착하면 어떻게 행동해야 할지를 명확히 기술 함으로써 나타나는 것들이다.
 
-For example, the specification says that trying to call something that isn't callable should throw an error.
-Maybe that sounds like "obvious behavior", but you could imagine that accessing a property that doesn't exist on an object should throw an error too.
-Instead, JavaScript gives us different behavior and returns the value `undefined`:
+예를 들어, 그 규격은 호출할 수 없는 어떤 것을 호출하려고 하는 경우 에러를 던지라고 말하고 있다.
+이러한 것은 아마도 "명백한 행위" 처럼 보이는데, 그러나 행뮈만이 아니라 객체에 존재하지 않는 프로퍼티에 접근하려 하는 경우에도 에러를 던지는 것을 당신은 짐작할 것이다.
+그러나 이경우에는 에러를 던지는 대신, 자바스크립트는 다른 행동을 하며 `undefined` 값을 가지고 리턴할 것이다:
 
 ```js
 let foo = {
@@ -104,8 +105,8 @@ let foo = {
 foo.location; // returns undefined
 ```
 
-Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's "valid" JavaScript that won't immediately throw an error.
-In TypeScript, the following code produces an error about `location` not being defined:
+궁극적으로, 정적 타입 시스템은 자바스크립트의 경우 "적절"하며 실행시에만 에러가 나는 경우라 하더라도, 컴파일 타입에 코드에 에러가 있음을 체크하도록 한다.
+타입스크립트에서는 다음의 코드는 `location`이 정의 되어 있지 않음을 출력한다:
 
 ```ts
 let foo = {
@@ -116,22 +117,22 @@ let foo = {
 foo.location; // returns undefined
 ```
 
-While sometimes that implies a trade-off in what you can express, the intent is to catch legitimate bugs in our programs.
-And TypeScript catches *a lot* of legitimate bugs.
-For example: typos,
+그러나 때로는 이것은 당신의 표현력에 트레이드-오프가 있음을 암시하며, 그 의도는 우리의 프로그램에 문법적인 버그가 있음을 잡아내려는 것이다.
+타입스크립트는 *수많은* 문법적 버그를 잡아낸다.
+예를 들어, 오타들,
 
 ```ts
 let someString = "Hello World!";
 
-// How quickly can you spot the typos?
+// 얼마나 빨리 오타를 찾아내었나요?
 someString.toLocaleLowercase();
 someString.toLocalLowerCase();
 
-// We probably meant to write this...
+// 우리는 이렇게 치려고 했을 겁니다...
 someString.toLocaleLowerCase();
 ```
 
-uncalled functions,
+호출되지 않는 함수,
 
 ```ts
 function flipCoin() {
@@ -139,7 +140,7 @@ function flipCoin() {
 }
 ```
 
-or basic logic errors.
+또는 기본적 로직 에러.
 
 ```ts
 const value = Math.random() < 0.5 ? "a" : "b";
@@ -147,7 +148,7 @@ if (value !== "a") {
     // ...
 }
 else if (value === "b") {
-    // Oops, unreachable
+    // 제어가 여길 오지 않습니다.
 }
 ```
 
@@ -155,45 +156,44 @@ else if (value === "b") {
 
 <!-- TODO: this section's title sucks -->
 
-TypeScript can catch bugs when we make mistakes in our code.
-That's great, but TypeScript can *also* prevent us from making those mistakes in the first place.
+타입스크립트는 우리가 코드에 버그를 만들면 그것을 잡아 냅니다.
+그것은 아주 훌륭합니다. 그라나 타입스크립트는 *또한* 그러한 실수를 처음부터 방지하도록 해줍니다.
 
-The type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
-Once it has that information, it can also start *suggesting* which properties you might want to use.
+타입체커는 우리가 변수의 프로퍼티에 옳게 접근하는지 검사할 수 있는 정보를 가지고 있습니다.
+타입체커가 한번 이러한 정보를 가지면, 이제는 당신이 프로퍼티를 사용하려고 할때 *제안*하는 능력을 가질수 있습니다.
 
-That means TypeScript can be leveraged for editing code too, and the core type-checker can provide error messages and code completion as you type in the editor.
-That's part of what people often refer to when they talk about tooling in TypeScript.
+이것이 의미하는 것은 타입스크립트는 코드를 에디팅 할때도 잇점을 가집니다. 타입체커의 코어는 에러메시지를 제공할 수도 있고, 에디터에서 코드완성도 지원해 줄수 있습니다.
 
 <!-- TODO: insert GIF of completions here -->
 
-TypeScript takes tooling seriously, and that goes beyond completions and errors as you type.
-An editor that supports TypeScript can deliver "quick fixes" to automatically fix errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
-All of this is built on top of the type-checker and fully cross-platform, so it's likely that [your favorite editor has TypeScript support available](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support).
+타입스크립트는 도구화를 진정으로 가져옵니다. 그리고 그서은 코드완성과 에러출력을 넘어섭니다.
+에디터는 "quick fixes" 라는 기능을 통하여 에러를 자동으로 수정하는 것을 지원하고, 코드의 리팩토링을 지원하고, 코드내부의 유용한 탐헝 기능을 제공하여 변수의 선언부로 이동하거나, 주어진 변수의 모든 참조를 찾기도 합니다.
+이러한 모든 기능들은 모두 타입체케에 기빈해야 가능하면 또한 완벽한 크로스 플랫폼을 지원합니다. 따라서 [단신의 선호하는 에디터가 타입스크립트를 지원하는가](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support)를 알수 있습니다.
 
 <!-- TODO: validate that link -->
 
 ## `tsc`, the TypeScript compiler
 
-We've been talking about type-checking, but we haven't yet used our type-*checker*.
-Let's get acquainted with our new friend `tsc`, the TypeScript compiler.
-First we'll need to grab it via npm.
+지금까지 타입체킹에 대하여 이야기 했는데, 우리는 아직 타입체커를 사용해보지 않았습니다.
+`tsc`라는 타입스크립트 컴파일러와 친해져 보도옥 하죠.
+먼저, npm 을 통해서 설치할 수 있습니다.
 
 ```sh
 npm install -g typescript
 ```
 
-> This installs the TypeScript Compiler `tsc` globally.
-> You can use `npx` or similar tools if you'd prefer to run `tsc` from a local `node_modules` package instead.
+> 이 명령은 타입스크립트 컴파일러 `tsc` 를 글로벌 하게 설치합니다.
+> 만약 당신이 로컬 `node_modules` 팩키지로 사용하기를 선호한다면 당신은 `npx` 또는 비슷한 도구를 사용할 수도 있습니다.
 
-Now let's move to an empty folder and try writing our first TypeScript program: `hello.ts`:
+이제 빈 폴더를 하나 만들고 우리의 첫번째 타입스크립트 프로그램 `hello.ts`을 작성해 봅시다:
 
 ```ts
-// Greets the world.
+// 세상에 인사.
 console.log("Hello world!");
 ```
 
-Notice there are no frills here; this "hello world" program looks identical to what you'd write for a "hello world" program in JavaScript.
-And now let's type-check it by running the command `tsc` which was installed for us by the `typescript` package.
+이 코드에는 아무런 화려한 장식이 없음을 알아 주세요; 이 "hello world" 프로그램은 자바스크립트의 것과 동일한 것처럼 보입니다.
+이제 `tsc`를 사용하여 타입 체크를 해 봅시다.
 
 ```sh
 tsc hello.ts
@@ -201,26 +201,26 @@ tsc hello.ts
 
 Tada!
 
-Wait, "tada" *what* exactly?
-We ran `tsc` and nothing happened!
-Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.
+잠시만요, "tada" 가 정학히 *무엇* 인가요?
+우리는 `tsc` 를 실행했고 아무일도 일어나지 않았습니다!
+글쌔요, 여기에는 타입에러가 없었고, 그래서 아무것도 리포트 할게 없었고, 그래서 콘솔에 아무것도 안 나온 것입니다.
 
-But check again - we got some *file* output instead.
-If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
-That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a plain JavaScript file.
-And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
+그러나 다시 체크해보세요 - 우리는 콘솔 출력대신 *파일*하나를 얻었습니다.
+이 파일은 현재 디렉토리에 있으며 그 이름은 `hello.js` 이다.
+이것이 `hello.ts` 파일을 *컴파일* 또는 *변환* 하여 순수한 자바스크립트 파일로 만든 것이다.
+이 파일의 내용을 보면, 타입스크립트는 다음의 내용을 산출해낸 것을 알수 있다:
 
 ```js
-// Greets the world.
+// 세상에 인사.
 console.log("Hello world!");
 ```
 
-In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote.
-The compiler tries to emit clean readable code that looks like something a person would write.
-While that's not always so easy, TypeScript indents consistently, is mindful of when our code spans across different lines of code, and tries to keep comments around.
+이 경우, 타입스크립트가 변환한거는 거의 없고, 따라서 타입스크립트 소스와 산출된 자바스크립트가 동일하게 보인다.
+컴파일러는 깨끗한 읽기 가능한 코드를 산출하려하며 마치 사람이 쓴 것처럼 보이기도 한다.
+물론 이러한 시도가 항상 쉬운 것은 아니며, 타입스크립트는 들여쓰기를 일관성 있게 하며, 코드가 여러라인에 걸치는 경우 세심하게 다루며 코멘트를 적절한 위치에 배치하려 한다.
 
-What about if we *did* introduce a type-checking error?
-Let's rewrite `hello.ts`:
+우리가 타입체킹 에러를 만든건 어떻게 될까?
+`hello.ts`를 다시 작성해 보자:
 
 ```ts
 // @noImplicitAny: false
@@ -232,44 +232,43 @@ function greet(person, date) {
 greet("Brendan");
 ```
 
-If we run `tsc hello.ts` again, notice that we get an error on the command line!
+`tsc hello.ts` 를 다시 실행하면 다음과 같은 에러 출력을 얻게 된다!
 
 ```txt
 Expected 2 arguments, but got 1.
 ```
 
-TypeScript is telling us we forgot to pass an argument to the `greet` function, and rightfully so.
-So far we've only written standard JavaScript, and yet type-checking was still able to find problems with our code.
-Thanks TypeScript!
+타입스크립트는 우리가 `greet` 험수에 아규먼트 하나를 빼먹었다고 말해준다.
+지금까지 표준 자바스크립트만을 써서 작성했지만 타입체킹은 우리 코드의 문제점을 찾아내었다.
 
 ### Emitting with Errors
 
-One thing you might not have noticed from the last example was that our `hello.js` file changed again.
-If we open that file up then we'll see that the contents still basically look the same as our input file.
-That might be a bit surprising given the fact that `tsc` reported an error about our code, but this based on one of TypeScript's core values: much of the time, *you* will know better than TypeScript.
+당신이 눈치채지 못하는 한가지는 방금 예제에서 우리의 `hello.js`는 다시 변화했다는 것이다.
+이 파일을 다시 열어 본다면 우리는 그 내용이 우리의 인풋 ts파일과 기본적으로 동일하다는 것을 볼 수 있을 것이다.
+이 사실은 약간 놀라울 수도 있는데 왜냐면 `tsc`는 에러 리포트를 했기 때문이다. 그러나 이것은 타입스크립트 코어의 기본에 기반한 것이고 시간이 지날수록 당신은 타입스크립트에 대해서 더 잘 알게 될 것이다.
 
-To reiterate from earlier, type-checking code limits the sorts of programs you can run, and so there's a tradeoff on what sorts of things a type-checker finds acceptable.
-Most of the time that's okay, but there are scenarios where those checks get in the way.
-For example, imagine yourself migrating JavaScript code over to TypeScript and introducing type-checking errors.
-Eventually you'll get around to cleaning things up for the type-checker, but that original JavaScript code was already working!
-Why should converting it over to TypeScript stop you from running it?
+처음으로 다시 돌아가서, 타입 체킹은 실행가능한 프로그램의 종류를 제한한다. 따라서 타입체커가 수용가능한 것들의 종류에 관한 트레이드-오프가 발생한다.
+대부분의 경우 이 것은 문제가 안된다, 그러나 이러한 타입 체킹이 방해물이 되는 경우가 존재한다.
+예를 들어, 당신이 자바스크립트 파일을 타입스크립트로 변환하는 작업을 하고 있고, 이러한 변경이 타입체킹 에러를 만들어 내는 경우가 있다.
+결과적으로 당신은 코드를 타입체커가 요구하는 대로 수정해서 이 문제를 해결하겠지만, 원래의 자바스크립트 코드는 이미 잘 동작하던 것이었다.
+왜 타입스크립트로 변환된 코드가 실행을 못하게 되도록 놔둬야 하는가?
 
-So TypeScript doesn't get in your way.
-Of course, over time, you may want to be a bit more defensive against mistakes, and make TypeScript act a bit more strictly.
-In that case, you can use the `--noEmitOnError` compiler option.
-Try changing your `hello.ts` file and running `tsc` with that flag:
+따라서 타입스크립트는 방해물이 되어서는 안된다.
+물론, 시간이 지나면서, 당신은 실수에 대해서 더욱 수비적인 자세가 될수 있다. 그리고 타입스크립트의 타입 검사를 더 엄격하게 할 수도 있다.
+만약 그런 경우라면 당신은 `--noEmitOnError` 컴파일러 옵션을 사용할 수 있다.
+`hello.ts` 수정하고 `tsc`를 이 옵션으로 실행해 보자:
 
 ```sh
 tsc --noEmitOnError hello.ts
 ```
 
-You'll notice that `hello.js` never gets updated.
+당신은 `hello.js`가 변경되지 않음을 알아낼 수 있다.
 
 ## Explicit Types
 
-Up until now, we haven't told TypeScript what `person` or `date` are.
-Let's change up our code a little bit so that we tell TypeScript that `person` is a `string`, and that `date` should be a `Date` object.
-We'll also use the `toDateString()` method on `date`.
+지금까지, 우리는 타입스크립트에게 `person` 또는 `date`가 무엇인지 말하지 않았다.
+우리의 코드를 조금 바꾸어서 `person`이 `string` 이고, `date` 가 `Date` 객체임을 기술해 주자.
+우리는 또한 `toDateString()` 메소드를 `date`에 사용할 것이다.
 
 ```ts
 function greet(person: string, date: Date) {
@@ -277,11 +276,11 @@ function greet(person: string, date: Date) {
 }
 ```
 
-What we did was add *type annotations* on `person` and `date` to describe what types of values `greet` can be called with.
-You can read that signature as "`greet` takes a `person` of type `string`, and a `date` of type `Date`".
+우리가 한 것은 *타입 명기* 를 `person` 과 `date` 에게 주어서 그들의 타입이 무엇 인지 기술하여 `greet` 함수가 어떻게 호출되어야 하는지 명확히 한 것이다.
+이러한 함수 시그니쳐를 "`greet` 함수는 `string` 타입의 `person` 과 `Date` 타입의 `date` 를 받는다" 라고 읽는다.
 
-With this, TypeScript can tell us about other cases where we might have been called incorrectly.
-For example...
+이러한 타입 명기로 타입스크립트는 다른 경우로 이 함수를 호출할 경우 올바로 동작하지 않는다는 것을 우리에게 알려 준다.
+예를 들어...
 
 ```ts
 function greet(person: string, date: Date) {
@@ -291,13 +290,13 @@ function greet(person: string, date: Date) {
 greet("Maddison", Date());
 ```
 
-Huh?
-TypeScript reported an error on our second argument, but why?
+어?
+타입스크립트는 두번째 아규먼트에 대해서 에러를 리포트 한다, 근데 왜?
 
-Perhaps surprisingly, calling `Date()` in JavaScript returns a `string`.
-On the other hand, constructing a `Date` with `new Date()` actually gives us what we were expecting.
+놀랍게도, 자바스크립트에서 `Date()`의 호출은 `string`을 반환한다.
+반면에 `new Date()`를 사용하여 `Date` 객체를 만드는 경우 우리가 원하는 결과를 가져온다.
 
-Anyway, we can quickly fix up the error:
+어찌됐든, 우리는 재빨리 에러를 수정하였다:
 
 ```ts
 function greet(person: string, date: Date) {
@@ -308,20 +307,20 @@ greet("Maddison", new Date());
                   ^^^^^^^^^^
 ```
 
-Keep in mind, we don't always have to write explicit type annotations.
-In many cases, TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
+우리가 항상 타입명시를 사용하지는 않는다는 점을 명심하라.
+많은 경우에, 타입스크립트는 타입을 *추정*함으로써 우리가 타입 명시를 빼먹어도 타입을 알 수 있다.
 
 ```ts
 let foo = "hello there!";
     ^?
 ```
 
-Even though we didn't tell TypeScript that `foo` had the type `string` it was able to figure that out.
-That's a feature, and it's best not to add annotations when the type system would end up inferring the same type anyway.
+우리가 `foo`의 타입이 `string` 이라고 명시하지 않아도 이 타입은 추정될 수 있다.
+이 것은 하나의 특성이며, 타입시스템이 타입 추정이 가능한 경우 굳이 타입을 명시하지 않는 것이 좋다.
 
 ## Erased Types
 
-Let's take a look at what happens when we compile with `tsc`:
+`tsc`를 사용하여 컴파일 했을 때 무슨일이 벌어지는지 살펴보자:
 
 ```js
 function greet(person, date) {
@@ -330,42 +329,43 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-Notice two things here:
+두가지 사실을 유념하자:
 
-1. Our `person` and `date` parameters no longer have type annotations.
-2. Our "template string" - that string that used backticks (the `` ` `` character) - was converted to plain strings with concatenations (`+`).
+1. `person` 과 `date` 파라메터는 더이상 타입 명시를 갖지 않는다.
+2. "template string"(`` ` ``문자를 사용한 문자열) 은 (`+`)를 사용하여 일반적 문자열로 변환 되었다.
 
-More on that second point later, but let's now focus on that first point.
-Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
-That's why TypeScript needs a compiler in the first place - it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
-Most TypeScript-specific code gets erased away, and likewise, here our type annotations were completely erased.
+두번째 것은 나중으로 미루고, 지금은 첫번째 것에 집중해보자.
+타입 명시는 자바스크립트의 것이 아니다, 따라서 어떠한 브라우저나 런타임이 타입스크립트를 수정없이 실행할 수는 없다.(***최근에 타입스크립트를 변환없이 실행하는 엔진이 Rust언어로 작성되어 릴리즈 되었다.)
+이 이유 때문에 타입스크립트는 자바스크립트로 변환되어 실행되는 방식을 사용한다.
+대부분의 타입스크립트에 특징적인 요소들은 삭제된다 - 우리의 타입 명시도 완전히 삭제되어 자바스크립트로 변환 되었다.
 
-> **Remember**: Type annotations never change the runtime behavior of your program.
+> **Remember**: 타입 명시는 컴파일 타임의 에러를 잡아내기 위함이다. 이것은 프로그램의 행동에 변화를 주지 않는다.
 
 ## Downleveling
 
-One other difference from the above was that our template string was rewritten from
+다른 하나의 변화는 template string 아 변경되었다는 것이다. template string은 
 
 ```js
 `Hello ${person}, today is ${date.toDateString()}!`
 ```
 
-to
+로부다
 
 ```js
 "Hello " + person + ", today is " + date.toDateString() + "!"
 ```
 
-Why did this happen?
+로 바뀌었다.
+왜 이런변환이 발생했을까?
 
-Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - *don't ask*).
-TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
-This process of moving from a newer or "higher" version of ECMAScript down to an older or "lower" one is sometimes called *downleveling*.
+Template strings는 ECMAScript 2015(a.k.a. ECMAScript 6, ES2015, ES6, etc) 라고 불리우는 버젼의 특성이다.
+타입스크립트는 신규버젼의 자바스크립트부터 오래된 버젼까지 즉, ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5) 까지 폭넓게 코드를 변환 할 능력이 있다.
+이렇듯, 높은 버젼으로부터 낮은 버젼으로 옮겨가는 일련의 과정을 *downleveling*이라 부른다.
 
-By default TypeScript targets ES3, an extremely old version of ECMAScript.
-We could have chosen something a little bit more recent by using the `--target` flag.
-Running with `--target es2015` changes TypeScript to target ECMAScript 2015, meaning code should be able to run wherever ECMAScript 2015 is supported.
-So running `tsc --target es2015 input.ts` gives us the following output:
+기본 세팅으로, 타입스크립트는 ES3을 타겟으로한 코드를 생성한다. 이 ES3은 극단적으로 오래된 버젼이다.
+`--target`을 사용해서 우리는 좀더 신규 버젼의 코드를 생성할 수 있다.
+`--target es2015` 옵션은 런타임 환경이 ECMAScript 2015를 지원하는 경우 사용할 수 있다.
+`tsc --target es2015 input.ts`를 사용하면 다음의 출력을 얻을 수 있다:
 
 ```js
 function greet(person, date) {
@@ -374,38 +374,39 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-> While the default target is ES3, the great majority of current browsers support ES5.
-> Most developers can therefore safely specify ES5 or even ES2016 as a target, unless compatibility with certain ancient browers is important.
+> 기본 타겟이 ES3이지만, 대다수의 현대 브라우저는 ES5를 지원한다.
+> 대다수의 개발자들은 따라서 안전하게 ES5 를 타켓으로 해서 개발을 할 수 있다 - 특별히 오래된 브라우저와의 호환성이 중요한 경우가 아니라면.
 
 ## Strictness
 
-Different users come to TypeScript looking for different things in a type-checker.
-Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and get decent tooling.
-This is the default experience with TypeScript, where types are optional, inference takes the most lenient types, and there's no checking for potentially `null`/`undefined` values.
-Much like how `tsc` emits in the face of errors, these defaults are put in place to stay out of your way.
-If you're migrating existing JavaScript, that might be a desirable first step.
+서로 다른 사용자는 타입체커에서 서로 다른 것을 원한다.
+어떤 사람들은 좀더 완화된 검사를 해서 프로그램의 특정 부분만의 적정성 검사를 원한다.
+이것은 기본적 타입스크립트 사용자 경험이다 - 타입은 옵션이고, 타입추정이 대부분의 허술한 타입의 경우이고, 잠재적인 `null`/`undefined` 값 검사를 하지 않는 것이다.
+대부분의 사람들은 `tsc` 가 에러를 만나도 코드를 출력하는 것을 좋아한다. 이러한 디폴트 설정은 타입스크립트가 방해물이 되지 않게 하기 위한 것이다.
+만약 기존의 자바스크립트를 타입스크립트로 변환하는 작업을 한다면 이러한 것들은 첫번째 요구사항이 될 것이다.
 
-In contrast, a lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
-These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
-The farther you turn this dial up, the more TypeScript will check for you.
-This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
-When possible, a new codebase should always turn these strictness checks on.
+반면에, 많은 사용자들은 타입스크립트가 할 수 있는 최대한 적정성 검사를 하기를 원한다. 이러한 이유로 엄격함 옵션이 또한 생겨 났다.
+이러한 엄격성 세팅은 정적 타입 체킹을 단순한 온오프 스위치에서 세밀히 조정할 수 있는 다이얼로 바꾸어 놓았다.
+다이얼을 더 올리면, 타입 체킹은 더 엄격해 진다.
+이것은 몇가지 추가적인 일을 요구하는데, 일반적으로 말해서 이러한 작업은 가치가 있으며 장기적으로 보았을 때 좀더 통찰력이 있는 타입체크와 정밀한 도구의 사용법이 될 것이다.
+가능하다면, 새로운 기반 코드의 작성은 이러한 엄격한 체크를 모두 하는 것이 좋다.
 
-TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
-The `--strict` flag toggles them all on simultaneously, but we can opt out of them individually.
-The two biggest ones you should know about are `noImplicitAny` and `strictNullChecks`.
+타입스크립트는 몇가지 타입체크를 위한 옹오프 할수 있는 엄격함 플래그를 제공한다.
+또한 우리의 모든 예제는 따로 기술하지 않는 경우 이러한 스위치를 모두 켠 상태이다.
+`--strict` 플래그는 이러한 스위치를 모두 한꺼번에 켜고 끌수 있는 것이다. 그러나 우리는 개별적으로 각각의 스위치를 온 오프 할 수 있다.
+두개의 가장 영향이 크고 당신이 알아야 할 중요한 플래그는 `noImplicitAny` 와 `strictNullChecks` 이다.
 
 ### `noImplicitAny`
 
-Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
-This isn't the worst thing that can happen - after all, falling back to `any` is just the plain JavaScript experience anyway.
+몇몇 장소에서 타입스크립트는 타입 추정에 실패하고 가장 허술한 타입인 `any`로 추정한다는 것을 기억하라.
+이것은 일어날 수 있는 최악의 상황은 아니다. - 결국 `any` 로 물러나는 것은 단지 순수 자바스크립트 경험이다.
 
-However, using `any` often defeats the purpose of using TypeScript in the first place.
-The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
-Turning on the `noImplicitAny` flag will issue an error on any variables whose type is implicitly inferred as `any`.
+하지만, `any`의 사용은 때때로 타입스크립트를 사용하는 목적을 처음부터 물리치는 행위이다.
+프로그램이 타입화 될수록, 적정성 판단과 버그의 자동화 발견은 머 잘 이루어 진다. 이것의 의미는 당신의 코드는 더 적은 버그를 가지는 것이다.
+`noImplicitAny` 플래그를 켜면 타입 추정에서 `any`로 되는 경우 에러를 출력하도록 해준다.
 
 ### `strictNullChecks`
 
-By default, values like `null` and `undefined` are assignable to any other type.
-This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - even in other languages!
-The `strictNullChecks` flag makes handling `null` and `undefined` more explicit, and *spares* us from worrying about whether we *forgot* to handle `null` and `undefined`.
+기본적으로, `null` 과 `undefined` 는 어떤 타입에도 대입할 수 있다.
+이것은 어떤 코드를 더 쉽게 작성할 수 있개 해주는데, 만약 `null` 과 `undefined`룰 적절히 처리하는 코드가 빠진 경우 수많은 버그를 양산한다 - 이것은 다른 언어에서도 마찬가지다.
+`strictNullChecks` 플래그는 `null` 과 `undefined` 가 명시적으로 처리되었는지를 검사해서 우리가 잊고 처리하지 않은 경우를 잡아낸다. 이것은 우리를 좀더 안심 하고 코딩하게 해준다.
