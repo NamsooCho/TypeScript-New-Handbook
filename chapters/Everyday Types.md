@@ -2,46 +2,46 @@
 
 # Everyday Types
 
-In this chapter, we'll cover some of the most common types of values you'll find in JavaScript code, and explain the corresponding ways to describe those types in TypeScript.
-This isn't an exhaustive list, and future chapters will describe more ways to name and use other types.
+이 챕터에서는 우리가 자바스크립트 코드에서 가장 공통적으로 발견하는 타입들에 대해서 다루며 그런 타입들이 타입스크립트에는 어떻게 해당되는지도 설명한다.
+이것은 충분한 리스트가 아니라서 앞으로의 챕터에서는 다른 타입의 이름가 사용법을 추가로 설명할 것이다.
 
-Types can also appear in many more *places* than just type annotations.
-As we learn about the types themselves, we'll also learn about the places where we can refer to these types to form new constructs.
+타입들은 단순히 타입명시 말고도 매우 여러 *장소*에서 발견된다.
+타입 그 자체에 대해서 배워가면서, 새로운 구조물을 만들면서 우리가 그러한 타입을 참조하는 장소에 대해서 또한 배워나갈 것이다.
 
-We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
-These will later form the core "building blocks" of more complex types.
+우리는 자바스크립트나 타입스크립트를 사용하여 프로그래밍 하면서 가장 흔하게 마주치는 공통적인 타입이면서 기장 기본적인 타입을 살펴보는 것으로 시작한다.
+이것들은 나중에 보다 복잡한 타입인 "building blocks"의 핵심을 형성할 것이다.
 
 __toc__
 
 ## Primitives `string`, `number`, and `boolean`
 
-JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) kinds of values: `string`, `number`, and `boolean`.
-Each has a corresponding type in TypeScript.
-As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
+자바스크립트는 세개의 가장 기본적인 [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)인 값의 종류를 갖는다: 그것은 `string`, `number`, 그리고 `boolean` 이다.
+각각의 것은 해당하는 타입스크립트 타입이 있다.
+당신이 기대하듯이, 이것들은 자바스크립트에서 `typeof` 연산자를 타입의 값들에 적용하면 볼 수 있는 이름과 동일하다.
 
-* `string` represents string values like `"Hello, world"`
-* `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
-* `boolean` is for the two values `true` and `false`
+* `string` 은 `"Hello, world"` 와 같은 문자열을 표현한다
+* `number` 는 `42`와 같은 숫자를 위한 것이다. 자바스크립트는 정수를 위한 특별한 런타임을 가지고 있지 않다, 따라서 `int` 또는 `float`에 해당하는 것이 없다 - 모든 것은 단순히 `number` 이다.
+* `boolean` 은 `true` 와 `false`의 두 개 값을 갖는다.
 
-> The type names `String`, `Number`, and `Boolean` (starting with capital letters) are legal, but refer to some special built-in types that shouldn't appear in your code. *Always* use `string`, `number`, or `boolean`.
+> `String`, `Number`, 그리고 `Boolean` 타입 이름은 (대문자로 시작하는) 문법 오류가 아니다, 그러나 이 이름들은 특별한 빌트인 타입을 가리키며 이것들은 당신의 코드에 나타나면 안된다. *항상* `string`, `number`, 또는 `boolean` 로 사용하라.
 
 ## Arrays
 
-To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (e.g. `string[]` is an array of strings, and so on).
-You may also see this written as `Array<number>`, which means the same thing.
-We'll learn more about the syntax `T<U>` when we cover *generics*.
+`[1, 2, 3]`와 같은 배열 타입을 정의하기 위해서, `number[]` 와 같은 문법을 사용하라; 이러한 문법은 어떤 타입에도 적용된다.(에를들어 `string[]`은 문자열의 배열이다.,...).
+당신은 아마도 `Array<number>`와 같은 문장도 볼 것인데, 이것은 앞의 것가 같은 의미이다.
+우리가 *제너릭*을 다룰 때 `T<U>`문법에 대해서 좀 더 다루어 볼 것이다.
 
-> Note that `[number]` is a different thing; refer to the section on *tuple types*.
+> `[number]`는 다른 것임을 유념하라; *tuple types* 섹션을 참조하라.
 
 ## `any`
 
-TypeScript also has a special type, `any`, that you can use whenever you don't want a particular value to cause typechecking errors.
+타입스크립트는 또한 특별한 타입인 `any`를 갖고 있다, 이것은 타입 검사를 행해서 오류를 잡아내는 것을 원치 않을 때 특정 값에 사용할 수 있다.
 
-When a value is of type `any`, you can access any properties of it (which will in turn be of type `any`), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:
+어떤 값의 타입이 `any`인 경우, 그것의 어떤 프로퍼티에도 접근이 가능하다, 함수인 것처럼 호출도 가능하고, 어떤 타입의 값도 할당 할 수 있고, 문법적으로 합당하다면 그 밖의 어떤 일도 할 수 있다:
 
 ```ts
 let obj: any = { x: 0 };
-// None of these lines of code are errors
+// 이 모든 라인들은 에러가 아니다.
 obj.foo();
 obj();
 obj.bar = 100;
@@ -49,47 +49,47 @@ obj = "hello";
 const n: number = obj;
 ```
 
-The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.
+`any` 타입은 만약 긴 이름을 가진 타입을 단지 특정 코드가 문제가 없다는 것을 확신하도록 하기 위해 쓰지 않기를 원할 때 유용하다.
 
 ### `noImplicitAny`
 
-When a type isn't specified and can't be inferred from context, TypeScript will typically default to `any`.
-Because `any` values don't benefit from type-checking, it's usually desirable to avoid these situations.
-The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged as an error.
+문맥으로 부터 타입을 추정할 수 없고 타입이 명시되지도 않은 경우, 타입스크립트는 디폴트로 `any`이라고 인식한다.
+`any` 값은 타입 검사의 이익을 누릴 수 없기 때문에, 이러한 상항을 피하는 것이 요망된다.
+`noImplicitAny` 컴파일러 플래그는 이러한 *암묵적*인 `any`를 에러로 표기하도록 해준다.
 
 ## Type Annotations on Variables
 
-When you declare a variable using `const`, `var`, or `let`, you can optionally add a type annotation to explicitly specify the type of the variable:
+`const`, `var`, 또는 `let` 을 사용하여 변수를 선언할 때, 그 변수의 타입을 명시적으로 표현하기 위해 타입 명시를 추가할 수 있다:
 
 ```ts
 let myName: string = "Alice";
           ^^^^^^^^ Type annotation
 ```
 
-> TypeScript doesn't use "types on the left"-style declarations like `int x = 0;`
-> Type annotations will always go *after* the thing being typed.
+> 타입스크립트는 `int x = 0;` 와 같이 좌측 타입 선언을 사용하지 않는다.
+> 타입 명시는 타이핑 되는 값의 *뒤에*에 항상 위치 한다.
 
-In most cases, though, this isn't needed.
-Wherever possible, TypeScript tries to automatically *infer* the types in your code.
-For example, the type of a variable is inferred based on the type of its initializer:
+대부분의 경우, 타입 명시는 불필요 하다.
+가능할 때마다 타입스크립트는 자동으로 당신의 코드상의 타입을 *추정* 한다.
+예를 들어, 변수의 타입은 그 변수의 초기화 값의 타입으로 *추정* 된다.
 
 ```ts
 // No type annotation needed -- 'myName' inferred as type 'string'
 let myName = "Alice";
 ```
 
-For the most part you don't need to explicitly learn the rules of inference.
-If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.
+대부분의 상항에서 당신은 추정 규칙을 명확히 공부할 필요가 없다.
+만약 시작한다면, 생각하는 것 보다 더 적은 수의 타입 명시를 사용하려고 노력해보라 - 아마도 당신은 타입스크립트가 무엇이 어떻게 돌아가고 있는지 이해하도록 하기위한 타입명시가 얼마나 적게 필요한지 놀랄 것이다.
 
 ## Functions
 
-Functions are the primary means of passing data around in JavaScript.
-TypeScript allows you to specify the types of both the input and output values of functions.
+자바스크립트에서 함수는 데이터를 전달 하는 주요 수단 이다.
+타입스크립트는 함수의 입력과 출력 값의 타입을 정의하도록 허용한다.
 
 ### Parameter Type Annotations
 
-When you declare a function, you can add type annotations after each parameter to declare what kinds of parameters the function accepts.
-Parameter type annotations go after the parameter name:
+함수를 선언할 때, 함수가 받아들이는 파라메터의 종류를 제한 하도록 각 파라메터의 타입 명시를 추가할 수 있다.
+파라메터 타입 명시는 파라메터 이름 뒤에 온다:
 
 ```ts
 // Parameter type annotation
@@ -99,7 +99,7 @@ function greet(name: string) {
 }
 ```
 
-When a parameter has a type annotation, calls to that function will be validated:
+파라메터가 타입 명시를 가지면, 그 함수를 호출할 때 타입 체크가 이루어진다:
 
 ```ts
 declare function greet(name: string): void;
@@ -110,8 +110,8 @@ greet(42);
 
 ### Return Type Annotations
 
-You can also add return type annotations.
-Return type annotations appear after the parameter list:
+함수의 반한 값의 타입도 명시될 수 있다.
+반환 값 타입 명시는 파라메터 리스트 뒤에 온다:
 
 ```ts
 function getFavoriteNumber(): number {
@@ -120,41 +120,41 @@ function getFavoriteNumber(): number {
 }
 ```
 
-Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its `return` statements.
-The type annotation in the above example doesn't change anything.
-Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference.
+변수의 타입 명시아 매우 비슷하게, 반환 값 타입 명시는 보통 불필요 한데 그 이유는 타입스크립트는 `return` 문장의 타입으로 부터 그 함수의 반환 값 타입을 추정하기 때문이다.
+위의 타입 명시 예제는 실제로 아무것도 변경시키지 않는다.
+어떤 코드베이스는 문서화 목적으로 반환값 타입 명시를 한다, 우연한 변경을 방지하고 또는 단지 개인적 참조용으로 말이다.
 
 ### Function Expressions
 
-Function expressions are a little bit different from function declarations.
-When a function expression appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.
+함수 식은 함수 선언과 약간 다르다.
+함수 식이 타입스크립트가 어떻게 호출되는지 결정할수 있는 장소에서는 함수의 파라메터는 자동적으로 주어진 타입으로 결정된다.
 
-Here's an example:
+여기 예제가 있다:
 
 ```ts
-// No type annotations here, but TypeScript can spot the bug
+// 여기에는 타입 명시가 없지만, 타입 스크립트는 버그를 식별해 낼 수 있다.
 const names = ["Alice", "Bob", "Eve"];
 names.forEach(function (s) {
     console.log(s.toUppercase());
 });
 ```
 
-Even though the parameter `s` didn't have a type annotation, TypeScript used the types of the `forEach` function, along with the inferred type of the array, to determine the type `s` will have.
+`s`에 아무런 타입 명시가 없지만, 타입스크립트는 `forEach` 함수에 배열로부터의 타입 추정으로 `s`가 가질 타입을 결정하였으며 그 타입으로 검사를 행한다.
 
-This process is called *contextual typing* because the *context* that the function occurred in informed what type it should have.
-Similar to the inference rules, you don't need to explicitly learn how this happens, but understanding that it *does* happen can help you notice when type annotations aren't needed.
-Later, we'll see more examples of how the context that a value occurs in can affect its type.
+이러한 것을 *문맥 타이핑* 이라 부르는데 그 이유는 *문맥*이 그 함수가 가져야 하는 타입을 말해주기 때문이다.
+타입 추정 규칙과 비슷하게, 당신은 이런 일이 어떻게 일어나는지 명확히 배울 필요가 없지만, 타입 명시가 필요하지 않을 때에 이러한 일이 당신을 돕기 위해 벌어진다는 것을 이해하는 것은 필요하다.
+나중에, 우리는 문맥이 값의 타입에 어떤 영향을 주는지 추가적인 예제를 살펴볼 것이다.
 
 ## Object Types
 
-Apart from primitives, the most common sort of type you'll encounter is an *object type*.
-This refers to any JavaScript value with properties, which is almost all of them!
-To define an object type, we simply list its properties and their types.
+프리미티브아 별개로, 가장 흔하게 당신이 마주치는 타입은 *객체 타입* 이다.
+이것은 프로퍼티를 가진 모든 자바스크립트 값을 말하는데, 이것은 거의 모든 값들을 포함한다!
+객체 타입을 정의하려면, 단순히 프로퍼티와 그 타입을 리스트로 나타내면 된다.
 
-For example, here's a function that takes a point-like object:
+예를 들어, 여기에 좌표 비슷한 객체를 받아들이는 함수가 있다:
 
 ```ts
-// The parameter's type annotation is an object type
+// 파라메터의 타입은 객체 타입이라고 명시되었다.
 function printCoord(pt: { x: number, y: number }) {
                         ^^^^^^^^^^^^^^^^^^^^^^^^
   console.log("The coordinate's x value is " + pt.x);
@@ -163,16 +163,16 @@ function printCoord(pt: { x: number, y: number }) {
 printCoord({ x: 3, y: 7 });
 ```
 
-Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
-You can use `,` or `;` to separate the properties, and the last separator is optional either way.
+여기서, 둘 다 `number` 타입인 `x` 와 `y`를 프로퍼티로 가지는 객체 타입을 명시하였다.
+`,` 또는 `;` 는 프로퍼티를 구분하는데 사용되며, 마지막 프로퍼티에 적용하는 것은 선택적이다.
 
-The type part of each property is also optional.
-If you don't specify a type, it will be assumed to be `any`.
+각 프로퍼티의 타입 부분도 선택적인 부분이다.
+만약 타입이 명시되지 않으면, 그 타입은 `any`로 가정된다.
 
 ### Optional Properties
 
-Object types can also specify that some or all of their properties are *optional*.
-To do this, add a `?` after the property name:
+객체 타입은 또한 자신의 프로퍼티의 일부 또는 전부를 *선택적*으로 정의할 수 있다.
+이를 위해서는 프로퍼티 이름 뒤에 `?`를 추가하면 된다.
 
 ```ts
 function printName(obj: { first: string, last?: string}) {
@@ -183,12 +183,12 @@ printName({ first: "Bob" });
 printName({ first: "Alice", last: "Alisson" });
 ```
 
-In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined` rather than a runtime error.
-Because of this, when you *read* from an optional property, you'll have to check for `undefined` before using it.
+자바스크립트에서, 존재하지 않는 프로퍼티에 접근하려 하면, 런타임 에러 대신에 `undefined` 값을 얻게 될 것이다.
+이 것 때문에, 선택적 프로퍼티를 *읽기* 할때, 반드시 그전에 `undefined` 검사를 해야 한다.
 
 ```ts
 function printName(obj: { first: string, last?: string}) {
-  // Error - might crash if 'obj.last' wasn't provided!
+  // Error - 'obj.last' 가 제공되지 않은 경우 프로그램이 다운 될 수 있다.
   console.log(obj.last.toUpperCase());
   if (obj.last !== undefined) {
     // OK
@@ -199,16 +199,16 @@ function printName(obj: { first: string, last?: string}) {
 
 ## Union Types
 
-TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
-Now that we know how to write a few types, it's time to start *combining* them in interesting ways.
+타입스크립트는 넒은 범위의 연산자를 사용하여 기존에 있던 타입들을 사용하여 새로운 타입을 만들수 있도록 해준다.
+이제 우리는 몇가지 타입을 어떻게 쓰는지 알고 있으므로, 흥미로운 방법으로 이러한 타입들을 *조합*하는 것에 대해 다룰 때가 되었다.
 
 ### Defining a Union Type
 
-The first way to combine types you might see is a *union* type.
-A union type is type formed from two or more other types, representing values that may be *any one* of those types.
-We refer to each of these types as the union's *members*.
+타입들을 조합하는 첫번째 방법으로 *유니온* 타입을 보자.
+두개 이상의 타입으로 구성된 것이 유니온 타입인데, 이러한 타입 중 *어떤 하나*인 값을 표현하는 타입이다.
+우리는 이러한 개개의 타입을 유니온의 *멤버*라 부른다.
 
-Let's write a function that can operate on strings or numbers:
+스트링 또는 숫자에 동작하는 함수를 하나 작성해 보자.
 
 ```ts
 function printId(id: number | string) {
@@ -224,11 +224,11 @@ printId([1, 2]);
 
 ### Working with Union Types
 
-It's easy to *provide* a value matching a union type - simply provide a type matching any of the union's members.
-If you *have* a value of a union type, how do you work with it?
+유니온 타입에 매치되는 값을 *제공*하는 것은 쉽다 - 단순히 유니온 멤버의 하나와 일치하는 타입의 값을 제공하면 된다.
+만약 유니온 타입의 값을 *소유*한 경우 그것을 가지고 어떻게 일할 것인가?
 
-TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
-For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
+타입스크립트는 오직 유니온의 *모든* 멤버에게 적절한 일을 하는 것만 허용할 것이다.
+예를 들어, 만약 `string | number` 유니온을 가지고 있다면, 오직 `string`에만 허용되는 메소드는 사용할 수 없을 것이다.
 
 ```ts
 function printId(id: number | string) {
@@ -236,10 +236,10 @@ function printId(id: number | string) {
 }
 ```
 
-The solution is to *narrow* the union with code, the same as you would in JavaScript without type annotations.
-*Narrowing* occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.
+이와 같은 문제의 해결책은 유니온을 코드를 사용하여 *좁히는* 것이다, 이것은 자바스크립트에서 타입 명시 없이 했던 방식과 동일하다.
+*내로윙* 은 코드의 구조에 기반하여 타입스크립트가 어떤 값을 더 특정적인 타입으로 좁히는 과정에 일어난다.
 
-For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
+예를 들어, 타입스크립트는 `"string"`에 대한 `typeof` 는 오직 `string`임을 알고 있다.
 
 ```ts
 function printId(id: number | string) {
@@ -253,7 +253,7 @@ function printId(id: number | string) {
 }
 ```
 
-Another example is to use a function like `Array.isArray`:
+다른 예제는 `Array.isArray` 와 같은 함수를 사용하는 것이다:
 
 ```ts
 function welcomePeople(x: string[] | string) {
@@ -267,11 +267,11 @@ function welcomePeople(x: string[] | string) {
 }
 ```
 
-Notice that in the `else` branch, we don't need to do anything special - if `x` wasn't a `string[]`, then it must have been a `string`.
+`else` 분기에서 특별한 무엇을 할 필요가 없음을 유의하라 - 만약 `x`가 `string[]`이 아니라면 그것은 반드시 `string`이기 때문이다.
 
-Sometimes you'll have a union where all the members have something in common.
-For example, both arrays and strings have a `slice` method.
-If every member in a union has a property in common, you can use that property without narrowing:
+때때로 모든 멤버가 공통의 무엇을 가지는 유니온을 사용할 것이다.
+예를 들어, 배열과 스트링은 공통적으로 `slice` 메소드를 가진다.
+유니온의 모든 멤버가 공통의 프로퍼티를 가지면 내로윙 없이 그 프로퍼티를 사용할 수 있다:
 
 ```ts
 // Return type is inferred as number[] | string
@@ -280,19 +280,19 @@ function getFirstThree(x: number[] | string) {
 }
 ```
 
-> It might be confusing that a *union* of types appears to have the *intersection* of those types' properties.
-> This is not an accident - the name *union* comes from type theory.
-> The *union* `number | string` is composed by taking the union *of the values* from each type.
-> Notice that given two sets with corresponding facts about each set, only the *intersection* of those facts applies to the *union* of the sets themselves.
-> For example, if we had a room of tall people wearing hats, and another room of Spanish speakers wearings hats, after combining those rooms, the only thing we know about *every* person is that they must be wearing a hat.
+> *유니온* 이라는 이름이 사실은 이러한 타입의 프로퍼티들의 *교집합*을 가지는 것으로 보이는 것은 혼란스러울 수 있다.
+> 이것은 문제가 아니다 - 이론상으로도 *유니온*이 맞다.
+> `number | string` *유니온*은 각 타입의 *값들의 합집합* 으로 구성된다.
+> 두개의 집합이 각각의 집합에 해당하는 사실들로 구성되어 있으면, 오직 그들의 *교집합*인 사실들만 *유니온*인 행위로서 적용될 수 있음을 유의하라.
+> 예를 들어, 우리가 모자를 쓴 키큰 사람들만 있는 방을 가지고 있다고, 다른 방은 모자를 쓴 스페인어를 쓰는 사람들의 방이 있다면, 이 두 방을 유니온 하면, *모든* 사람이 모자를 썼다는 사실만을 알게 된다.
 
 ## Type Aliases
 
-We've been using object types and union types by writing them directly in type annotations.
-This is convenient, but it's common to want to use the same type more than once and refer to it by a single name.
+우리는 객체 타입과 유니온 타입을 사용하여 타입 명시에 직접적으로 사용하였다.
+이것은 편리하다, 그러나 같은 타입을 여러번 사용하고 이러한 타입을 하나의 이름으로 명명하고 싶은 것은 흔한 일이다.
 
-A *type alias* is exactly that - a *name* for any *type*.
-The syntax for a type alias is:
+*타입 별칭*은 정확히 그것이다 - 어떤 *타입*을 위한 어떤 *이름*이다.
+타입 별칭의 문법은:
 
 ```ts
 type Point = {
@@ -300,7 +300,7 @@ type Point = {
   y: number
 };
 
-// Exactly the same as the earlier example
+// 이전 예제와 완전히 동일하다.
 function printCoord(pt: Point) {
   console.log("The coordinate's x value is " + pt.x);
   console.log("The coordinate's y value is " + pt.y);
@@ -309,16 +309,16 @@ function printCoord(pt: Point) {
 printCoord({ x: 100, y: 100 });
 ```
 
-You can actually use a type alias to give a name to any type at all, not just an object type.
-For example, a type alias can name a union type:
+실제로 어떤 타입에도 타입 별칭으로 다른 이름을 줄 수 있으며 객체 타입에만 한정되는 것은 아니다.
+예를 들어, 유니온 타입에도 타입 별칭을 줄 수 있다:
 
 ```ts
 type ID = number | string;
 ```
 
-Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
-When you use the alias, it's exactly as if you had written the aliased type.
-In other words, this code might *look* illegal, but is OK according to TypeScript because both types are aliases for the same type:
+별칭은 *단지* 별칭일 뿐이라는 것을 유의하라 - 동일한 타입을 별칭을 사용하여 다른/구분되는 버젼의 타입을 만들 수는 없다.
+별칭을 사용하면, 그것은 정확히 원래의 타입을 사용하는 것과 같다.
+다른 말로 설명하면, 코드는 *부적절*하게 보일지 몰라도, 타입스크립트는 두개의 별칭이 같은 타입이므로 OK로 판단한다:
 
 ```ts
 type Age = number;
@@ -331,7 +331,7 @@ const myWeight: Weight = myAge;
 
 ## Interfaces {#interfaces}
 
-An *interface declaration* is another way to name an object type:
+*인터페이스 선언*은 객체 타입을 명명하는 또 다른 방법이다:
 
 ```ts
 interface Point {
@@ -347,56 +347,56 @@ function printCoord(pt: Point) {
 printCoord({ x: 100, y: 100 });
 ```
 
-Just like when we used a type alias above, the example works just as if we had used an anonymous object type.
-TypeScript is only concerned with the *structure* of the value we passed to `printCoord` - it only cares that it has the expected properties.
-Being concerned only with the structure and capabilities of types is why we call TypeScript a *structurally typed* type system.
+타입 별칭에서 우리가 했듯이, 이 예제는 익명 객체 타입을 사용했을 때 처럼 동작한다.
+타입스크립트는 우리가 전달한 `printCoord`의 *구조*에만 관심을 갖는다 - 그것은 오직 기대되는 프로퍼티들이 있는가만 관심을 갖는다.
+타입의 구조와 능력에만 관심을 갖는다는 것은 우리가 타입스크립트를 *구조적 타입* 타입 시슽템을 가진다고 부르는 이유이다.
 
 ### Differences Between Type Aliases and Interfaces {#interface-vs-alias}
 
-Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
-Here are the most relevant differences between the two that you should be aware of.
-You'll learn more about these concepts in later chapters, so don't worry if you don't understand all of these right away.
+타입 별칭과 인터페이스는 매우 유사하다, 그리고 많은 경우 둘 사이에서 자유롭게 선택해도 무방하다.
+당신이 알아야 할 둘 사이의 가장 적절한 차이가 여기 있다.
+나중에 당신은 이러한 개념에 대해 더 설명을 들을 것이므로 지금 당장 이것을 이해하지 못하더라도 걱정할 필요는 없다.
 
-* Interfaces may be `extend`ed, but not type aliases. We'll discuss this later, but it means that interfaces can provide more guarantees when creating new types out of other types.
-* Type aliases may not participate in declaration merging, but interfaces can.
-* Interfaces may only be used to declare object types.
-* Interface names will *always* appear in their original form in error messages, but *only* when they are used by name.
-* Type alias names *may* appear in error messages, sometimes in place of the equivalent anonymous type (which may or may not be desirable).
+* 인터페이스는 `extend`(확장)될 수 있다. 우리는 이것을 나중에 토의 할 것이지만 이 말의 의미는 인터페이스가 다른 타입들로 부터 새로운 타입을 생성할때 더 많은 보장을 제공한다는 의미이다.
+* 타입 별칭은 선언 병합에 참여할 수 없지만 인터페이스는 가능하다.
+* 인터페이스는 오직 객체 선언에서만 사용이 가능하다.
+* 인터페이스 이름은 에러 메시지에서 그들의 원래 형태로 *항상* 나타나지만 *오직* 그 이름으로 사용되었을 때만 이다.
+* 타입 별칭은 *아마도* 에러 메시지에 나타날 수 있다, 때때로 동일한 익명 타입을 대신해서 나타난다(원하는 것이든 원하지 않는 것이든).
 
-For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of declaration.
+대부분의 경우, 개인적 취향에 따라 선택하여 사용하면 되며 타입스크립트는 다른 선언이 필요하면 친절히 알려줄 것이다.
 
 ## Type Assertions
 
-Sometimes you will have information about the type of a value that TypeScript can't know about.
+때때로 타입스크립트가 알아낼 수 없는 어떤 값의 타입에 관한 정보를 개발자는 갖고 있는 경우가 있다.
 
-For example, if you're using `document.getElementById`, TypeScript only knows that this will return *some* kind of `HTMLElement`, but you might know that your page will always have an `HTMLCanvasElement` with a given ID.
+예를 들어, `document.getElementById`를 쓰고 있다면, 타입스크립트는 단지 *어떤* 종류의 `HTMLElement`를 갖는다는 것 만을 알수 있으나 당신은 웹 페이지가 항상 주어진 id 에는 오직 `HTMLCanvasElement` 만이 있다는 것을 알고 있는 경우가 있다.
 
-In this situation, you can use a *type assertion* to specify a more specific type:
+이런 상황에서는, 타입의 더욱 특정적인 타입으로 규정하는 *타입 확신"을 사용할 수 있다.
 
 ```ts
 const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
 ```
 
-Like a type annotation, type assertions are removed by the compiler and won't affect the runtime behavior of your code.
+타입 명시와 비슷하게, 타입 확정은 컴파일러에 의해 제거되며 코드의 행동에 어떤한 영향도 끼치지 않는다.
 
-You can also use the angle-bracket syntax (except if the code is in a `.tsx` file), which is equivalent:
+또한 앵글 브라켓 문법은 이와 동일한(`.tsx` 파일 안에서는 제외하고) 의미이다.
 
 ```ts
 const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
 ```
 
-> Reminder: Because they are removed at compile-time, there is no runtime checking associated with a type assertion.
-> There won't be an exception or `null` generated if the type assertion is wrong.
+> 기억할 점: 이들은 컴파일 타임에 제거되므로, 타입 확신은 실행시 어떠한 체크도 일어나지 않는다.
+> 타입 확신이 틀렸다 하더라도 어떠한 예외나 `null`이 생성되지는 않는다.
 
-TypeScript only allows type assertions which convert to a *more specific* or *less specific* version of a type.
-This rule prevents "impossible" coercions like:
+타입스크립트는 타인 확신을 *더 세밀한* 또는 *덜 세밀한* 타입의 버젼으로 변경하게 해준다.
+이러한 규칙은 불가능한 강제 형변환을 방지한다:
 
 ```ts
 const x = "hello" as number;
 ```
 
-Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
-If this happens, you can use two assertions, first to `any` (or `unknown`, which we'll introduce later), then to the desired type:
+때때로 이러한 규칙은 너무 보수적이어서 더 복잡하지만 적절한 형변환 조차 허락하지 않는다.
+만약 이러한 일이 일어나면, 두개의 타입 확신을 사용하여 원하는 타입으로 지정이 가능하다 - 먼저 `any` (또는 `unknown`으로, 나중에 설명할 것이다)로 바꾸고 그다음 원하는 타입으로 변경.
 
 ```ts
 declare const expr: any;
@@ -407,23 +407,24 @@ const a = expr as any as T;
 
 ## Literal Types
 
-In addition to the general types `string` and `number`, we can refer to *specific* strings and numbers in type positions.
+`string` 과 `number` 같은 범용 타입 외에, 타입 명시 위치에 *특정적인* 스트링과 숫자를 지정할 수 있다.
 
-By themselves, literal types aren't very valuable:
+그 자체로는, 리터럴 타입들은 매유 유용하지는 않다:
 
 ```ts
 let x: "hello" = "hello";
 // OK
 x = "hello";
 // OK
+
 x = "hello";
 // ...
 x = "howdy";
 ```
 
-It's not much use to have a variable that can only have one value!
+변수가 오직 하나의 값만 가지는 것은 많이 사용되지는 않는다!
 
-But by *combining* literals into unions, you can express a much more useful thing - for example, functions that only accept a certain set of known values:
+그러나 유니온으로 *합성* 되어서는, 더욱 유용한 것을 표현 할 수 있다 - 예를 들어, 알고있는 값들의 집합 만을 받아들이는 함수를 만들 수 있다:
 
 ```ts
 function printText(s: string, alignment: "left" | "right" | "center") {
@@ -433,7 +434,7 @@ printText("Hello, world", "left");
 printText("G'day, mate", "centre");
 ```
 
-Numeric literal types work the same way:
+숫자 리터럴도 같은 방식으로 동작한다:
 
 ```ts
 function compare(a: string, b: string): -1 | 0 | 1 {
@@ -441,7 +442,7 @@ function compare(a: string, b: string): -1 | 0 | 1 {
 }
 ```
 
-Of course, you can combine these with non-literal types:
+물론, 이러한 타입을 리터럴이 아닌 타입과 합성하는 것도 가능하다:
 
 ```ts
 interface Options {
@@ -455,14 +456,14 @@ configure("auto");
 configure("automatic");
 ```
 
-There's one more kind of literal type: boolean literals.
-There are only two boolean literal types, and as you might guess, they are the types `true` and `false`.
-The type `boolean` itself is actually just an alias for the union `true | false`.
+리터럴 타입이 하나 더 존재한다: 불리언 리터럴이다.
+불리언 리터럴 타입은 오직 두 개만 존재한다, 여러분이 추측하듯이, `true` 와 `false` 두 개의 타입 뿐이다.
+`boolean` 타입 그 자체는 사실 `true | false` 유니온 타입의 별칭일 뿐이다.
 
 ### Literal Inference
 
-When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
-For example, if you wrote code like this:
+객체를 가지고 변수를 초기화 한 경우, 타입스크립트는 나중에 그 객체의 프로퍼티가 변경될 것이라고 가정한다.
+예를 들어, 이와 같은 코드를 작성했다면:
 
 ```ts
 declare const someCondition: boolean;
@@ -473,10 +474,10 @@ if (someCondition) {
 }
 ```
 
-TypeScript doesn't assume the assignment of `1` to a field that previously had `0` to be an error.
-Another way of saying this is that `obj.counter` must have the type `number`, not `0`, because types are used to determine both *reading* and *writing* behavior.
+타입스크립트는 `1` 을 이전에 `0` 이었던 필드에 대입하는 연산이 에러가 되리라고 가정하지 않는다.
+다른 말로 하면 `obj.counter` 의 타입은 `0`이 아니라 `number`가 된다, 왜냐하면 타입은 *읽기* 와 *쓰기* 행동을 결정하는데 사용되기 때문이다.
 
-The same applies to strings:
+스트링에게도 동일한 규칙이 적용된다:
 
 ```ts
 declare function handleRequest(url: string, method: "GET" | "POST"): void;
@@ -487,8 +488,8 @@ handleRequest(req.url, req.method);
 
 <!-- TODO: Use and explain const contexts -->
 
-Because it'd be legal to assign a string like `"GUESS"` TO `req.method`, TypeScript considers this code to have an error.
-You can change this inference by adding a type assertion in either location:
+`req.method`애 `"GUESS"`와 같은 문자열을 대입하는 것이 문법적으로 틀리지 않기 때문에, 타입스크립트는 이 코드는 에러를 가지고 있다고 판단한다.
+이러한 타입 추정을 피하려면 양쪽에 타입 확신을 추가해주면 된다.
 
 ```ts
 declare function handleRequest(url: string, method: "GET" | "POST"): void;
@@ -498,25 +499,25 @@ const req = { url: "https://example.com", method: "GET" as "GET" };
 handleRequest(req.url, req.method as "GET");
 ```
 
-The first change means "I intend for `req.method` to always have the *literal type* `"GET"`", preventing the possible assignment of `"GUESS"` to that field.
-The second change means "I know for other reasons that `req.method` has the value `"GET"`".
+처음 변경은 "나는 `req.method`가 *리터럴 타입*인 `"GET"`을 항상 갖도록 하겠다"를 의미하고, 이것은 `"GUESS"`와 같은 대입 연산을 막아준다.
+두번째 변경은 "나는 `req.method`가 `"GET"` 값을 갖는 다른 이유를 안다" 라는 의미 이다.
 
 ## `null` and `undefined`
 
-JavaScript has two primitive values, `null` and `undefined`, both of which are used to signal absent or uninitialized values.
+자바스크립트는 `null` 과 `undefined` 의 두개의 프리미티브 값을 가진다, 두개 다 부재와 초기화 되지 않았음을 나타내는 데 사용 된다.
 
-TypeScript has two corresponding *types* by the same names. How these types behave depends on whether you have the `strictNullChecks` option on.
+타입스크립트 같은 이름으로 해당하는 *타입*을 갖는다. 이러한 타입들이 어떻게 행동하느냐는 `strictNullChecks` 옵션에 따라 달라진다.
 
 ### `strictNullChecks` off
 
-With `strictNullChecks` *off*, values that might be `null` or `undefined` can still be accessed normally, and the values `null` and `undefined` can be assigned to a property of any type.
-This is similar to how languages without null checks (e.g. C#, Java) behave.
-The lack of checking for these values tends to be a major source of bugs; we always recommend people turn `strictNullChecks` on if it's practical to do so in their codebase.
+`strictNullChecks`가 *off* 이면, `null` 또는 `undefined`가 되는 값들도 여전히 평범하게 접근되고, 어떤 타입에도 `null` 또는 `undefined` 값이 대입 될 수 있다.
+이것은 널 체크가 없는 언어(예: C#, Java)의 행동과 비슷하다.
+이러한 값들의 검사가 없는 것은 버그의 주요 원인이 되는 경향이 있다; `strictNullChecks`을 항상 켜서 사용하도록 사람들에게 권한다 - 만약 이것이 그들의 코드베이스에 적용 가능 하다면.
 
 ### `strictNullChecks` on
 
-With `strictNullChecks` *on*, when a value is `null` or `undefined`, you will need to test for those values before using methods or properties on that value.
-Just like checking for `undefined` before using an optional property, we can use *narrowing* to check for values that might be `null`:
+`strictNullChecks` 가 *on* 이면, 어떤 값이 `null` 또는 `undefined` 이면, 그 값에 대한 프로퍼티나 메소드를 사용하기 전에 반드시 검사해야할 필요가 있다.
+옵셔널 프로퍼티에서 `undefined`를 검사했던 것 처럼, *narrowing* 을 사용하여 `null`이 될 수도 있는 값에 대해서 검사를 수행 할 수 있다.
 
 ```ts
 function doSomething(x: string | null) {
@@ -530,8 +531,8 @@ function doSomething(x: string | null) {
 
 ### Non-null Assertion Operator (Postfix `!`) {#non-null-operator}
 
-TypeScript also has a special syntax for removing `null` and `undefined` from a type without doing any explicit checking.
-Writing `!` after any expression is effectively a type assertion that the value isn't `null` or `undefined`:
+타입스크립트는 아무런 명시적 검사가 없이 `null` 과 `undefined` 을 타입으로부터 제거할 수 있는 특별한 문법이 있다.
+연산식 다음에 `!`을 붙입으로써 값이 `null` 또는 `undefined`이 아니라는 확신을 효과적으로 할수 있다.
 
 ```ts
 function liveDangerously(x?: number | null) {
@@ -540,4 +541,4 @@ function liveDangerously(x?: number | null) {
 }
 ```
 
-Just like other type assertions, this doesn't change the runtime behavior of your code, so it's important to only use `!` when you know that the value *can't* be `null` or `undefined`.
+다른 타입 확신과 마찬가지로, 이것은 코드의 런타임 행동을 변경하지는 않는다, 따라서 만약 값이 *절대로* `null` 또는 `undefined` 되지 않는 다고 확신 할 때에만 사용 가능 하다는 것은 중요하다.
