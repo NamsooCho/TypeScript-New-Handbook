@@ -1,9 +1,9 @@
 # Object Types
 
-In JavaScript, the fundamental way that we group and pass around relevant data is through objects.
-In TypeScript, we represent those through *object types*.
+자바스크립트에서, 우리가 관계있는 데이터를 구룹짓고 전달하는 근본적 방법은 객체를 통해서 이다.
+타입스크립트에서, 우리는 그러한 것들을 *object types* 를 통해서 표현한다.
 
-As we've seen, they can be anonymous
+우리가 보아 왔듯이, 그들은 익명성을 가질 수 있다.
 
 ```ts
 function greet(person: { name: string, age: number }) {
@@ -12,7 +12,7 @@ function greet(person: { name: string, age: number }) {
 }
 ```
 
-or they can be named by using either an interface
+또는 그들은 인터페이스를 사용하여 이름을 부여하거나
 
 ```ts
 interface Person {
@@ -26,7 +26,7 @@ function greet(person: Person) {
 }
 ```
 
-or a type alias.
+타입 별칭을 통하여 이름을 부여한다.
 
 ```ts
 type Person = {
@@ -40,16 +40,16 @@ function greet(person: Person) {
 }
 ```
 
-In all three examples above, we've written functions that take objects that contain the property `name` (which must be a `string`) and `age` (which must be a `number`).
+위 3 가지 예제에서, 우리는 객체를 받아들이는 함수를 작성하였고, 그 객체는 `string` 타입인 `name`과 `number` 타입인 `age` 프로퍼티를 갖고 있다.
 
 ## Property Modifiers
 
-Each property in an object type can specify a couple of things: the type, whether the property is optional, and whether the property can be written to.
+객체 타입에서 각각의 프로퍼티는 한쌍의 무엇을 정의한다: 타입, 그 프로퍼티가 생략 가능한지, 그리고 그 프로퍼티가 갱신 가능한지.
 
 ### Optional Properties
 
-Much of the time, we'll find ourselves dealing with objects that *might* have a property set.
-In those cases, we can mark those properties as *optional* by adding a question mark (`?`) to the end of their names.
+대부분의 경우, 우리는 프로퍼티 집합을 갖는 객체를 다루게 될 것이다.
+그런 경우, 우리는 프로퍼티의 끝에 물음표 (`?`) 를 붙임으로써 그 프로퍼티가 *생략가능* 한지를 표시할 것이다.
 
 ```ts
 interface Shape {};
@@ -75,9 +75,9 @@ paintShape({ shape, yPos: 100 });
 paintShape({ shape, xPos: 100, yPos: 100 });
 ```
 
-In this example, both `xPos` and `yPos` are considered optional.
-We can choose to provide either of them, so every call above to `paintShape` is valid.
-All optionality really says is that if the property *is* set, it better have a specific type.
+이 예제에서, `xPos` 와 `yPos`는 둘 다 생략가능하다.
+우리는 그 둘 다 값을 제공할지 말지 선택이 가능하고, 따라서 위의 모든 `paintShape` 호출은 옳다.
+모든 생략 가능성은 실제로 말하는 것은 그 프로퍼티가 셋팅된다면 어떤 특정한 타입을 가지는 것이 좋다는 것이다.
 
 ```ts
 interface Shape {};
@@ -101,7 +101,7 @@ paintShape({ shape });
 paintShape({ shape, xPos: 100 });
 ```
 
-We can also read from those properties - but when we do under `strictNullChecks`, TypeScript will tell us they're potentially `undefined`.
+우리는 그러한 프로퍼티를 읽을 수 있는데 - 만약 `strictNullChecks` 하에서 우리가 이렇게 하면, 타입스크립트는 거기에 잠재적인 `undefined` 가 있다고 알려준다.
 
 ```ts
 interface Shape {};
@@ -125,8 +125,8 @@ function paintShape(opts: PaintOptions) {
 }
 ```
 
-In JavaScript, even if the property has never been set, we can still access it - it's just going to give us the value `undefined`.
-We can just handle `undefined` specially.
+자바스크립트에서, 그 프로퍼티가 셋팅되지 않을지라도, 우리는 여전히 그것을 접근할 수 있다 - 그것은 단지 우리에게 `undefined` 값을 줄 뿐이다.
+우리는 특별히 `undefined`를 처리하기만 하면 된다.
 
 ```ts
 interface Shape {};
@@ -148,6 +148,7 @@ function paintShape(opts: PaintOptions) {
 }
 ```
 
+이런 식으로 미확정된 값들을 디폴트 값으로 셋팅하는 패턴은 자바스크립트에서 매우 흔한 문법적 지원을 갖고 있다.
 Note that this pattern of setting defaults for unspecified values is so common that JavaScript has syntax to support it.
 
 ```ts
@@ -172,12 +173,12 @@ function paintShape({ shape, xPos = 0, yPos = 0 }: PaintOptions) {
 }
 ```
 
-Here we used [a destructuring pattern](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) for `paintShape`'s parameter, and provided [default values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Default_values) for `xPos` and `yPos`.
-Now `xPos` and `yPos` are both definitely present within the body of `paintShape`, but optional for any callers to `paintShape`.
+여기서 우리가 사용한 [a destructuring pattern](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)은 `paintShape` 파라메터에 기본 값 부여 [default values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Default_values) 이다.
+이제 `xPos` 와 `yPos` 둘다 확정적인 값을 `paintShape` 몸체 내에서 갖게 되었으나, 여전히 `paintShape`를 호출하는 측에서는 생략가능하다.
 
 <aside>
-Note that there is currently no way to place type annotations within destructuring patterns.
-This is because the following syntax already means something different in JavaScript.
+현재 디스트럭쳐링 패턴에서 타입 명시를 할 방법이 없다는 것을 유념하라.
+그 이유는 자바스크립트에서 다른 무언가를 의미하는 문법이 이미 있기 때문이다.
 
 ```ts
 // @noImplicitAny: false
@@ -190,14 +191,14 @@ function foo({ shape: Shape, xPos: number = 100, /*...*/ }) {
 }
 ```
 
-In an object destructuring pattern, `shape: Shape` means "grab the property `shape` and redefine it locally as a variable named `Shape`.
-Likewise `xPos: number` creates a variable named `number` whose value is based on the parameter's `xPos`.
+객체 디스트럭쳐링 패턴에서, `shape: Shape`의 의미는 `shape`를 받아서 `Shape`라는 이름의 로컬 변수로 재정의 한다는 것이다.
+비스하게 `xPos: number`는 `number`라는 이름의 로컬 변수를 생성하며 그 값은 `xPos` 파라메터의 값에 근거 한다.
 </aside>
 
 ### `readonly` Properties
 
-Properties can also be marked as `readonly` for TypeScript.
-While it won't change any behavior at runtime, a property marked as `readonly` can't be written to during type-checking.
+프로퍼티는 타입스크립트에서 `readonly`로 표시 될 수 있다.
+런타임에 그것은 어떠한 행동도 변경할 수 없게 되지만, `readonly`로 표시된 프로퍼티는 타입 체킹 동안에도 값이 변경될 수 없다.
 
 ```ts
 interface SomeType {
@@ -213,8 +214,8 @@ function doSomething(obj: SomeType) {
 }
 ```
 
-Using the `readonly` modifier doesn't necessarily imply that a value is totally immutable - or in other words, that its internal contents can't be changed.
-It just means the property itself can't be re-written to.
+`readonly` 수정자를 사용하는 것이 반드시 그 값이 완전히 갱신 불가능하다는 것을 암시하지는 않는다 - 다른 말로 - 그 내부의 내용이 변경 불가능 하다는 것이 아니다.
+그것은 단지 프로퍼티 자체가 다시 기록될수 없다는 것을 의미한다.
 
 ```ts
 interface Home {
@@ -236,9 +237,9 @@ function evict(home: Home) {
 }
 ```
 
-It's important to manage expectations of what `readonly` implies.
-It's useful to signal intent during development time for TypeScript on how an object should be used.
-TypeScript doesn't factor in whether properties on two types are `readonly` when checking whether those types are compatible, so `readonly` properties can also change via aliasing.
+`readonly` 가 암시하는 것이 무엇인지 기대하는 것을 잘 관리하는 것은 중요하다.
+개발 기간 동안에 타입스크립트에서 그 객체가 어떻게 사용되는지를 신호를 주는 용도로 유용하다.
+타입스크립트는 두 타입이 호환성이 있는지 검사할 때 그들이 `readonly`인지 고려하지 않는다, 따라서 `readonly` 프로퍼티는 타입 별칭 하는 과정에서 변화가 가능하다.
 
 ```ts
 interface Person {
@@ -266,8 +267,8 @@ console.log(readonlyPerson.age); // prints '43'
 
 ## Extending Types
 
-It's pretty common to have types that might be more specific versions of other types.
-For example, we might have a `BasicAddress` type that describes the fields necessary for sending letters and packages in the U.S.
+어떤 타입이 다른 타입의 보다 세부적인 타입을 갖는 일은 매우 흔한 일이다.
+예를 들어, `BasicAddress` 타입이 있고 미국 내에서 우편과 소포를 보낼 수 있는 필드를 갖고 있다면.
 
 ```ts
 interface BasicAddress {
@@ -279,8 +280,8 @@ interface BasicAddress {
 }
 ```
 
-In some situations that's enough, but addresses often have a unit number associated with them if the building at an address has multiple units.
-We can then describe an `AddressWithUnit`.
+몇몇 상황에서 이것 만으로 충분하다, 그러나 주소들은 때때로 주소상의 빌딩이 여러개의 유닛으로 구성된 경우 유닛 번호도 갖는다.
+우리는 그러면 `AddressWithUnit`을 기술해야 한다.
 
 ```ts
 interface AddressWithUnit {
@@ -294,8 +295,8 @@ interface AddressWithUnit {
 }
 ```
 
-This does the job, but the downside here is that we had to repeat all the other fields from `BasicAddress` when our changes were purely additive.
-Instead, we can extend the original `BasicAddress` type and just add the new fields that are unique to `AddressWithUnit`.
+이것은 제 역할을 한다, 그러나 여기서의 단점은 `BasicAddress` 가 원래의 것으로도 충분히 동작 할 때에도 모든 주소에서 이 필드를 반복해야 한다는 것이다.
+그 대신, `BasicAddress` 타입을 확장해서, 새로운 필드를 추가하고 독립적인 `AddressWithUnit` 타입을 만드는 것이다.
 
 ```ts
 interface BasicAddress {
@@ -311,11 +312,11 @@ interface AddressWithUnit extends BasicAddress {
 }
 ```
 
-The `extends` keyword on an `interface` allows us to effectively copy members from other named types, and add whatever new members we want.
-This can be useful for cutting down the amount of type declaration boilerplate we have to write, and for signaling intent that several different declarations of the same property might be related.
-For example, `AddressWithUnit` didn't need to repeat the `street` property, and because `street` originates from `BasicAddress`, a reader will know that those two types are related in some capacity.
+`interface`에 사용하는 `extends` 키워드는 다른 이름의 타입에 정의된 멤버들을 효과적으로 복사하고 원하는 새로운 멤버를 추가하도록 해준다.
+이것은 타입 선언의 보일러플레이트의 양을 삭감해주고, 동일한 프로퍼티의 몇개의 다른 선언이 관련되어 있다는 신호를 주려고 할 때 유용하다.
+예를 들어, `AddressWithUnit` 는 `street`를 다시 반복할 필요가 없으며, 이것은 `street`이 `BasicAddress`에 있기 때문이다, 코드를 읽는 사람은 두 개의 타입이 몇몇 부분에서 서로 연관되어 있다는 것을 알게 될 것이다.
 
-`interface`s can also extend from multiple types.
+`interface`는 또한 다수의 타입들로 부터 확장하는데 사용될 수 있다.
 
 ```ts
 interface Colorful {
@@ -336,10 +337,10 @@ const cc: ColorfulCircle = {
 
 ## Intersection Types
 
-`interface`s allowed us to build up new types from other types by extending them.
-TypeScript provides another construct called *intersection types* that is mainly used to combine existing object types.
+`interface`는 어떤 타입을 확장함으로써 새로운 타입을 만들도록 해준다.
+타입스크립트는 *intersection types*라는 구조를 제공해서 기존에 존재하는 타입들을 결합하는데 사용되도록 해준다.
 
-An intersection type is defined using the `&` operator.
+intersection 타입은 `&` 연산자를 사용해서 정의 된다.
 
 ```ts
 interface Colorful { color: string; }
@@ -348,7 +349,7 @@ interface Circle { radius: number; }
 type ColorfulCircle = Colorful & Circle;
 ```
 
-Here, we've intersected `Colorful` and `Circle` to produce a new type that has all the members of `Colorful` *and* `Circle`.
+여기서, `Colorful` 와 `Circle`를 교차시켜서 두 `Colorful` *그리고* `Circle`의 모든 멤버를 갖는 새로운 타입을 만들었다.
 
 ```ts
 interface Colorful { color: string; }
@@ -368,17 +369,17 @@ draw({ color: "red", raidus: 42});
 
 ## Interfaces vs. Intersections
 
-We just looked at two ways to combine types which are similar, but are actually subtly different.
-With interfaces, we could use an `extends` clause to extend from other types, and we were able to do something similar with intersections and name the result with a type alias.
-The principle difference between the two is how conflicts are handled, and that difference is typically one of the main reasons why you'd pick one over the other between an interface and a type alias of an intersection type.
+우리는 타입을 결합하는 비슷한 두가지 방법을 살펴보았다, 그러나 두 방법은 실제로는 미묘하게 다른 점이 있다.
+인터페이스를 가지고는, `extends` 절을 사용하여 다른 타입을 확장하였고, 인터섹션으로 비슷한 일을 하여 타입 별칭으로 이름을 줄 수 있었다.
+두 방법의 주요한 차이점은 충돌이 어떻게 해결되는 가에 달려있으며, 그 차이는 두 방법 중 어느 것을 선택하는가의 주요한 이유가 된다.
 
-For example, two types can declare the same property in an interface.
+예를 들어, 인터페이스에서 두 타입은 같은 프로퍼티를 선언할 수 있다.
 
 TODO
 
 ## Generic Object Types
 
-Let's imagine a `Box` type that can contain any value - `string`s, `number`s, `Giraffe`s, whatever.
+무슨 값이든 담을 수 있는 타입인 `Box`를 상상해 보자.
 
 ```ts
 interface Box {
@@ -386,9 +387,9 @@ interface Box {
 }
 ```
 
-Right now, the `contents` property is typed as `any` which works, but can lead to accidents down the line.
+당장은, `contents` 프로퍼티가 `any` 타입이 되었고, 이것은 잘 동작한다, 그러나 그 라인 아래로 사고가 날 수 있다.
 
-We could instead use `unknown`, but that would mean that in cases where we already know the type of `contents`, we'd need to do precautionary checks, or use error-prone type assertions.
+그대신 우리는 `unknown`을 사용할 수 있지만, 그것은 우리가 `contents`의 타입을 이미 알고 있는 경우를 의미하며, 우리는 예방적 검사나 에러가 나기 쉬운 타입 assertions을 사용할 필요로 한다.
 
 ```ts
 interface Box {
@@ -408,7 +409,7 @@ if (typeof x.contents === "string") {
 console.log((x.contents as string).toLowerCase());
 ```
 
-If we really cared to get type safety, we could instead scaffold out different `Box` types for every type of `contents`
+우리가 진정으로 타입 안정성에 대해 주의를 기울인다면, `contents`의 모든 타입을 위한 다른 `Box` 타입을 발판으로 사용할 수 있다.
 
 ```ts
 interface NumberBox {
@@ -424,7 +425,7 @@ interface BooleanBox {
 }
 ```
 
-but that means we'll have to create different functions, or overloads of functions, to operate on these types.
+그러나 그것은 다른 함수들 다 각각 만들거나, 함수를 오버로드 하여 그 각각의 타입에 적용하여야 한다는 것을 의미한다.
 
 ```ts
 interface NumberBox {
@@ -447,10 +448,10 @@ function setContents(box: { contents: any }, newContents: any) {
 }
 ```
 
-That's a lot of boilerplate, and technically we might later need to introduce new types and overloads.
-This is frustrating since our box types and overloads are all effectively the same.
+이것은 좀 큰 보일러플레이트이며, 기술적으로 우리는 나중에 추가적인 타입과 오버로드가 필요해질 것이다.
+이것은 매우 당황스러운 일인데, 우리의 box 타입과 오버로드들은 모두 실제로 같은 효과를 가지기 때문이다.
 
-Instead, we can make a *generic* `Box` type which declares a *type parameters*.
+그대신, 우리는 *제너릭* `Box` 타입을 *타입 파라메터*를 선언하여 만들 수 있다.
 
 ```ts
 interface Box<T> {
@@ -458,8 +459,8 @@ interface Box<T> {
 }
 ```
 
-You might read this as "A `Box` of `T` is something whose `contents` have type `T`.
-Later on, when we refer to `Box`, we have to give some *type arguments* in place of `T`.
+우리는 이것을 "`T` 의 `Box`가 `contents`를 갖는데 그 타입이 `T`이다" 라고 읽을 수 있다.
+나중에, `Box`를 참조할 때, 우리는 *타입 아규먼트*로서 `T`의 위치에 무언가를 주어야 한다.
 
 ```ts
 interface Box<T> {
@@ -469,9 +470,9 @@ interface Box<T> {
 let box: Box<string>;
 ```
 
-Think of `Box` as a template for a real type, where `T` is a placeholder that will get replaced with some other type.
-When TypeScript sees `Box<string>`, it will replace every instance of `T` in `Box<T>` with `string`, and end up working with something like `{ contents: string }`.
-In other words, `Box<string>` and our earlier `StringBox` work identically.
+실제 타입의 템플레이트로서 `Box`를 생각해 보라, 여기서 `T`는 나중에 다른 무슨 타입으로 대치되는 플레이스홀더 이다.
+타입스크립트가 `Box<string>`을 보았을 때, `Box<T>`안의 모든 `T`들에 대하여 `string`으로 치환이 일어나고, 결국 `{ contents: string }` 와 비슷한 것이 되어 동작한다.
+다른 말로 하면, `Box<string>`과 앞에 나온 `StringBox`는 완전히 동일하게 동작한다.
 
 ```ts
 interface Box<T> {
@@ -485,7 +486,7 @@ let boxA: Box<string> = { contents: "hello" };
 let boxB: StringBox = { contents: "world" };
 ```
 
-`Box` is reusable in that `T` can be substituted with anything, and that means that when we need a box for a new type, we don't need to declare a new box type at all (though we certainly could if we wanted to).
+`T`가 무엇으로든지 치환 가능하기 때문에 `Box` 는 재사용 가능하며, 이것이 의미하는 것은 새로운 타입으로 box가 필요할 경우 우리는 새로운 box 타입을 선언할 필요가 전혀 없다는 것이다(우리가 원한다면 새로 선언도 가능하다).
 
 ```ts
 interface Box<T> {
@@ -500,7 +501,7 @@ interface Apple {
 type AppleBox = Box<Apple>;
 ```
 
-This also means that we can avoid overloads entirely by instead using [generic functions](./More-on-Functions.md#Generic-Functions).
+이것은 또한 [generic functions](./More-on-Functions.md#Generic-Functions)을 사용함으로써 오버로딩도 완전히 피할 수 있는 것을 의미한다.
 
 ```ts
 interface Box<T> {
@@ -513,7 +514,7 @@ function setContents<T>(box: Box<T>, newContents: T) {
 }
 ```
 
-At this point, it's also worth calling out that type aliases can also be generic, and we could have defined our new `Box<T>` interface
+이 시점에서, 타입 별칭도 제너릭이 될 수 있다는 것을 상기하는 것이 유익하며 우리는 새로운 `Box<T>` 인터페이스를 다음과 같이 정의하는 것이 가능하다.
 
 ```ts
 interface Box<T> {
@@ -521,7 +522,7 @@ interface Box<T> {
 }
 ```
 
-by using a type alias instead:
+이거 대신에 타입 별칭을 사용해서:
 
 ```ts
 type Box<T> = {
@@ -529,7 +530,7 @@ type Box<T> = {
 }
 ```
 
-In fact, given that type aliases can describe more than just object types, we can occasionally write some generic helper types as well.
+실제로, 단순히 객체 타입보다 타입 별칭이 더 많은 것을 기술할 수 있기 때문에, 우리는 때때로 또한 제너릭 헬퍼 타입을 작성할 수 있다.
 
 ```ts
 type OrNull<T> = T | null;
@@ -543,15 +544,16 @@ type Foo = OneOrManyOrNull<string>;
      ^?
 ```
 
-We'll circle back to type aliases in just a little bit.
+우리는 빙 돌아서 타입 별칭으로 조금 있다가 돌아올 것이다.
 
 ### The `Array` Type
 
-Generic object types are often some sort of container type that work independently of the type of elements they contain.
-It's ideal for data structures to work this way so that they're re-usable across different data types.
 
-It turns out we've been working with a type just like that throughout this handbook: the `Array` type.
-Whenever we write out types like `number[]` or `string[]`, that's really just a shorthand for `Array<number>` and `Array<string>`.
+제너릭 객체 타입은 자주 일종의 컨테이너 타입으로 동작하는데 그 이유는 그것이 담고 있는 요소의 타입과 독립적으로 동작하기 때문이다.
+자료구조를 위해서는 이런식으로 동작하는 것이 이상적인데 서로 다른 데이터 타입에 대해 재사용이 가능하기 때문이다.
+
+지금까지 우리는 이책 전체를 통해서 하나의 타입과 같은 비슷한 것을 다룬 것이 드러났다: 그것은 `Array`이다.
+우리가 `number[]` 나 `string[]` 같은 타입을 쓸 때마다, 그것은 단지 `Array<number>` 나 `Array<string>`을 줄여서 쓴 것에 불과하다.
 
 ```ts
 function doSomething(value: Array<string>) {
@@ -565,7 +567,7 @@ doSomething(myArray);
 doSomething(new Array("hello", "world"));
 ```
 
-Much like the `Box` type above, `Array` itself is a generic type.
+앞에서의 `Box` 타입과 매우 비스하게, `Array` 그 자체는 제너릭 타입이다.
 
 ```ts
 // @noLib: true
@@ -594,12 +596,12 @@ interface Array<T> {
 }
 ```
 
-Modern JavaScript also provides other data structures which are generic, like `Map<K, V>`, `Set<T>`, and `Promise<T>`.
-All this really means is that because of how `Map`, `Set`, and `Promise` behave, they can work with any sets of types.
+모던 자바스크립트는 또한 제너릭인 `Map<K, V>`, `Set<T>`, 그리고 `Promise<T>`와 같은 자료구조를 제공한다.
+이것들이 진실로 의미하는 것은 `Map`, `Set`, 의 `Promise` 어떻게 행동하는 가 이지 그 타입이 아니다, 그들은 어떤 종류의 타입과도 잘 동작한다.
 
 ### The `ReadonlyArray` Type
 
-The `ReadonlyArray` is a special type that describes arrays that shouldn't be changed.
+`ReadonlyArray`는 특별한 타입으로서, 값이 바뀌지 않는 배열을 기술한다.
 
 ```ts
 function doStuff(values: ReadonlyArray<string>) {
@@ -612,22 +614,22 @@ function doStuff(values: ReadonlyArray<string>) {
 }
 ```
 
-Much like the `readonly` modifier for properties, it's mainly a tool we can use for intent.
-When we see a function that returns `ReadonlyArray`s, it tells us we're not meant to change the contents at all, and when we see a function that consumes `ReadonlyArray`s, it tells us that we can pass any array into that function without worrying that it will change its contents.
+프로퍼티를 위한 `readonly` 수정자와 같이, 그것은 우리의 의도를 위해 사용 가능한 도구이다.
+`ReadonlyArray`를 반환하는 함수를 보면, 그것은 우리가 컨텐츠의 변경을 의미하지 않는다고 말해주고, `ReadonlyArray`를 소비하는 함수를 보면, 그것은 함수가 우리가 넘겨준 배열의 내용을 변경할까봐 걱정할 필요가 없다고 말해준다.
 
-Unlike `Array`, there isn't a `ReadonlyArray` constructor that we can use.
+`Array`와 달리, 우리가 사용할 수 있는 `ReadonlyArray` 생성자가 없다.
 
 ```ts
 new ReadonlyArray("red", "green", "blue");
 ```
 
-Instead, we can assign regular `Array`s to `ReadonlyArray`s.
+그대신, 일반적 `Array`를 `ReadonlyArray`에 대입할 수 있다.
 
 ```ts
 let roArray: ReadonlyArray<string> = ["red", "green", "blue"];
 ```
 
-Just as TypeScript provides a shorthand syntax for `Array<Foo>` with `Foo[]`, it also provides a shorthand syntax for `ReadonlyArray<Foo>` with `readonly Foo[]`.
+타입스크립트가 `Foo[]`로써 `Array<Foo>`의 축약 문법을 제공하듯이, `readonly Foo[]`는 `ReadonlyArray<Foo>`의 축약 문법이다.
 
 ```ts
 function doStuff(values: readonly string[]) {
@@ -641,7 +643,7 @@ function doStuff(values: readonly string[]) {
 }
 ```
 
-One last thing to note is that unlike the `readonly` property modifier, assignability isn't bidirectional between regular `Array`s and `ReadonlyArray`s.
+유의해야 할 마지막 이야기는 `readonly` 프로퍼티 수정자와 달리, 정규 `Array`와 `ReadonlyArray`는 양방향 대입이 불가능 하다는 점이다.
 
 ```ts
 let x: readonly string[] = [];
@@ -653,16 +655,16 @@ y = x;
 
 ### Tuple Types
 
-A *tuple type* is another sort of `Array` type that knows exactly how many elements it contains, and exactly which types it contains at specific positions.
+*튜플 타입*은 `Array` 타입의 또 다른 한 종류 로서, 엘리먼트가 몇개인지, 특정 위치에 무슨 타입을 가지고 있는지 정확히 아는 경우 이다.
 
 ```ts
 type StringNumberPair = [string, number];
                         ^^^^^^^^^^^^^^^^
 ```
 
-Here, `StringNumberPair` is a tuple type of `string` and `number`.
-Like `ReadonlyArray`, it has no representation at runtime, but is significant to TypeScript.
-To the type system, `StringNumberPair` describes arrays whose `0` index contains a `string` and whose `1` index contains a `number`.
+여기서, `StringNumberPair`는 `string` 과 `number`의 튜플 타입이다.
+`ReadonlyArray` 처럼, 런타임에 그것은 아무련 대표성이 없지만, 타입스크립트에게는 의미가 크다.
+타입 시스템에게, `StringNumberPair`는 `0`번 인덱스에 `string`을 `1`번 인덱스에 `number`를 담고 있는 배열을 기술하고 있다.
 
 ```ts
 function doSomething(pair: [string, number]) {
@@ -676,7 +678,7 @@ function doSomething(pair: [string, number]) {
 doSomething(["hello", 42]);
 ```
 
-If we try to index past the number of elements, we'll get an error.
+우리가 엘리먼트의 숫자를 넘어서서 인덱스를 접근하려고 하면 우리는 에러를 얻게 될 것이다.
 
 ```ts
 function doSomething(pair: [string, number]) {
@@ -686,7 +688,7 @@ function doSomething(pair: [string, number]) {
 }
 ```
 
-We can also [destructure tuples](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring) using JavaScript's array destructuring.
+우리는 또한 [destructure tuples](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring)를 할 수 있는데 이것은 자바스크립트의 배열 디스트럭쳐링을 사용한 것이다.
 
 ```ts
 function doSomething(stringHash: [string, number]) {
@@ -701,14 +703,14 @@ function doSomething(stringHash: [string, number]) {
 ```
 
 <aside>
-Tuple types are useful in heavily convention-based APIs, where each element's meaning is "obvious".
-This gives us flexibility in whatever we want to name our variables when we destructure them.
-In the above example, we were able to name elements `0` and `1` to whatever we wanted.
+튜플 타입은 심하게 컨벤션기반인 API에 유용한데 각 엘리먼트의 의미가 명백한 경우이다.
+이것은 디스트럭쳐 할때 우리가 원하는 무슨 이름이든 부여할 수 있는 융툥성을 준다.
+위 예제에서, `0` 과 `1`엘리먼트의 이름을 우리가 원하는 것으로 부여할 수 있었다.
 
-However, since not every user holds the same view of what's obvious, it may be worth reconsidering whether using objects with descriptive property names may be better for your API.
+하지만, 모든 사용자가 명백한 것이 무엇인지 동일한 생각을 가지고 있지 않으므로, 당신의 API에 서술적인 프로퍼티 이름을 주는 것이 더 나은지 재고해 보는 것은 가치가 있다.
 </aside>
 
-Other than those length checks, simple tuple types like these are equivalent to types which are versions of `Array`s that declare properties for specific indexes, and that declare `length` with a numeric literal type.
+길이 검사외에, 간단한 튜플 타입은 특정 인덱스에 프로퍼티를 선언하고 숫자 리터럴 타입으로 길이를 선언하는 `Array`의 한 버젼과 같다.
 
 ```ts
 interface StringNumberPair {
@@ -722,8 +724,8 @@ interface StringNumberPair {
 }
 ```
 
-Another thing you may be interested in is that tuples can have optional properties by writing out a question mark (`?` after an element's type).
-Optional tuple elements can only come at the end, and also affect the type of `length`.
+당신이 관심을 가질만한 다른 것은 튜플은 물음표(`?`를 엘리먼트 타입뒤에 추가)를 써줌으로써, 생략가능한 프로퍼티를 가질 수 있다는 것이다.
+생략 가능한 튜플 엘리먼트는 오직 끝에만 올 수 있고, `length`의 타입에 영향을 준다.
 
 ```ts
 type Either2dOr3d = [number, number, number?];
@@ -737,14 +739,14 @@ function setCoordinate(coord: Either2dOr3d) {
 }
 ```
 
-Tuples can also have rest elements, which have to be an array/tuple type.
+튜플은 나머지 엘리먼트를 가질 수도 있는데, 나머지 엘리먼트는 배역/튜플 타입인 경우 이다.
 
 ```ts
 type StringNumberBooleans = [string, number, ...boolean[]];
 ```
 
-`StringNumberBooleans` describes a tuple whose first two elements are `string` and `number` respectively, but which may have any number of `boolean`s following.
-A tuple with a rest element has no set `length` - it only has a set of well-known elements at the beginning.
+`StringNumberBooleans`는 처음의 두 엘리먼트가 `string` 과 `number`이고, 다수의 `boolean`들을 가지고 있다고 기술하고 있다.
+나머지 엘리먼트를 가진 튜플은 `length`가 설정되지 않는데 - 그것은 단지 처음의 알려진 엘리먼트만 가지고 있다.
 
 ```ts
 type StringNumberBooleans = [string, number, ...boolean[]];
@@ -754,9 +756,9 @@ const b: StringNumberBooleans = ["beautiful", 2, true];
 const c: StringNumberBooleans = ["world", 3, true, false, true, false, true];
 ```
 
-Why might optional and rest elements be useful?
-Well, it allows TypeScript to correspond tuples with parameter lists.
-Tuples types can be used in [rest parameters and arguments](./More-on-Functions.md#rest-parameters-and-arguments), so that the following:
+왜 생략가능 또는 나머지 엘리먼트가 유용한가?
+그것은 타입스크립트가 해당하는 튜플 파라메터 리스트를 허용하기 때문이다.
+튜플은 [rest parameters and arguments](./More-on-Functions.md#rest-parameters-and-arguments)에서 사용될 수 있고, 다음을 보자:
 
 ```ts
 function foo(...args: [string, number, ...boolean[]]) {
@@ -765,7 +767,7 @@ function foo(...args: [string, number, ...boolean[]]) {
 }
 ```
 
-is basically equivalent to
+는 기본적으로 다음과 동일 하다
 
 ```ts
 function foo(x: string, y: number, ...z: boolean[]) {
@@ -773,7 +775,7 @@ function foo(x: string, y: number, ...z: boolean[]) {
 }
 ```
 
-This is handy when you want to take a variable number of arguments with a rest parameter, and you need a minimum number of elements, but you don't want to introduce intermediate variables.
+나머지 파라메터로 변하는 수의 아규먼트를 받을 때 이것은 편리하며, 당신은 최소 엘리먼트의 숫자만 필요하며 중간 변수를 도입하지 않아도 되는 장점이 있다.
 
 <!--
 TODO do we need this example?
@@ -805,7 +807,7 @@ function foo(a: number, b: number, ...args: number[]) {
 
 ### `readonly` Tuple Types
 
-One final note about tuple types - tuples types have `readonly` variants, and can be specified by sticking a `readonly` modifier in front of them - just like with array shorthands.
+튜플 타입에 대한 마지막 주의점은 - 튜플 타입은 `readonly` 변이를 가진다, 그리고 `readonly` 수정자를 튜플앞에 고정적으로 정의 할 수도 있다 - 배열 축약 표현 처럼. 
 
 ```ts
 function doSomething(pair: readonly [string, number]) {
@@ -814,7 +816,7 @@ function doSomething(pair: readonly [string, number]) {
 }
 ```
 
-As you might expect, writing to any property of a `readonly` tuple isn't allowed in TypeScript.
+당신이 기대하는 것처럼, 타입스크립트에서는 `readonly` 튜플의 어떤 엘리먼트도 갱신 될 수 없다.
 
 ```ts
 function doSomething(pair: readonly [string, number]) {
@@ -822,8 +824,8 @@ function doSomething(pair: readonly [string, number]) {
 }
 ```
 
-Tuples tend to be created and left un-modified in most code, so annotating types as `readonly` tuples when possible is a good default.
-This is also important given that array literals with `const` assertions will be inferred with `readonly` tuple types.
+튜플은 대부분의 코드에서 생성된 후 갱신되지 않는 경향이 있다, 따라서 `readonly` 튜플을 사용하는 것은 가능한 좋은 기본 스타일 이다.
+`const` assertions을 가진 배열 리터럴은 `readonly` 튜플 타입으로 추정된다는 것은 중요하다.
 
 ```ts
 let point = [3, 4] as const;
@@ -835,8 +837,8 @@ function distanceFromOrigin([x, y]: [number, number]) {
 distanceFromOrigin(point);
 ```
 
-Here, `distanceFromOrigin` never modifies its elements, but expects a mutable tuple.
-Since `point`'s type was inferred as `readonly [3, 4]`, it won't be compatible with `[number, number]` since that type can't guarantee `point`'s elements won't be mutated.
+여기서, `distanceFromOrigin`는 절대로 튜플의 엘리먼트를 변경하지 않으나 갱신가능한 튜플을 원하고 있다.
+`point`의 타입은 `readonly [3, 4]`로 추정되었으므로, `[number, number]`와 호환성이 없는데 그 이유는 `point`의 엘리먼트가 갱신되지 않을 거라는 것을 보장할 수 없기 때문이다.
 
 ## Other Kinds of Object Members
 
