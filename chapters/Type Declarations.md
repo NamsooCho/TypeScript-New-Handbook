@@ -1,95 +1,96 @@
+
 # Type Declarations
 
-Throughout the sections you've read so far, we've been demonstrating basic TypeScript concepts using the built-in functions present in all JavaScript runtimes.
-However, almost all JavaScript today includes many libraries to accomplish common tasks.
-Having types for the parts of your application that *aren't* your code will greatly improve your TypeScript experience.
-Where do these types come from?
+지금까지 여러분이 읽은 섹센들을 통해서, 우리는 타입스크립트의 기본적 개념을 자바스크립트 런타임에 모두 포함되는 빌트인 함수를 사용하여 시연하였다.
+그러나, 오늘날 자바스크립트의 거의 대부분이 공통적 임무를 수행하기 위한 수많은 라이브러리를 포함하고 있다.
+당신의 애플리케이션의 일부를 위한 당신의 코드가 아닌 타입들은 당신의 타입스크립트 경험을 위대하게 증가시킬 것이다.
+이러한 타입들은 어디서 온 것일까?
 
 __toc__
 
 ## What Do Type Declarations Look Like?
 
-Let's say you write some code like this:
+당신이 다음과 같은 코드를 작성한다고 해보자:
 
 ```ts
 const k = Math.max(5, 6);
 const j = Math.mix(7, 8);
 ```
 
-How did TypeScript know that `max` was present but not `mix`, even though `Math`'s implementation wasn't part of your code?
+`Math`의 구현이 당신 코드의 일부분이 아님에도 타입스크립트는 어떻게 `max`는 존재하고 `mix`는 존재하지 않는 다는 것을 알 수 있을까?
 
-The answer is that there are *declaration files* describing these built-in objects.
-A declaration file provides a way to *declare* the existence of some types or values without actually providing implementations for those values.
+그 대답은 빌트인 객체를 서술하는 *declaration files*애 았다.
+이 선언 파일은 어떤 타입이나 값의 실제적 구현을 제공하지 않고 그 존재만을 *선언*하는 것을 제공한다.
 
 ## `.d.ts` files
 
-TypeScript has two main kinds of files.
-`.ts` files are *implementation* files that contain types and executable code.
-These are the files that produce `.js` outputs, and are where you'd normally write your code.
+타입스크립트는 크게 두 종류의 파일을 갖는다.
+`.ts` 파일은 *구현* 파일로서 타입과 실행가능한 코드로 구성되어 있다.
+이것은 `.js` 출력 파일을 생성하며 보통 당신의 코드를 작성하는 곳이다.
 
-`.d.ts` files are *declaration* files that contain *only* type information.
-These files don't produce `.js` outputs; they are only used for typechecking.
-We'll learn more about how to write our own declaration files later.
+`.d.ts` 파일은 *선언* 파일이며 *오직* 타입 정보만을 담고 있다.
+이 파일은 `.js` 출력을 생성하지 않으며; 오직 타입 검사만을 위해 사용된다.
+우리는 우리 자신의 선언 파일을 어떻게 작성하는지 나중에 더 알아볼 것이다.
 
 ## Built-in Type Definitions
 
-TypeScript includes declaration files for all of the standardized built-in APIs available in JavaScript runtimes.
-This includes things like methods and properties of built-in types like `string` or `function`, top-level names like `Math` and `Object`, and their associated types.
-By default, TypeScript also includes types for things available when running inside the browser, such as `window` and `document`; these are collectively referred to as the DOM APIs.
+타입스크립트는 자바스크립트 런타임에서 사용가능한 모든 표준 빌트인 API들의 선언 파일을 포함하고 있다.
+이 파일은 `string` 이나 `function` 같은 메소드와 프로퍼티와 같은 것들을 포함하며, `Math` 와 `Object` 같은 톱 레벨 이름들과 그 연관 타입들도 포함한다.
+기본적으로, 타입스크립트는 브라우저 내부에서 실행될때 사용가능한 것들에 대한 타입들도 가지고 있는데, `window` 와 `document` 같은 것들이다; 이것들은 DOM API라고 총합적으로 불리운다.
 
-TypeScript names these declaration files with the pattern `lib.[something].d.ts`.
-If you navigate into a file with that name, you can know that you're dealing with some built-in part of the platform, not user code.
+타입스크립트는 이러한 선언 파일들을 `lib.[something].d.ts` 패턴으로 명명한다.
+만약 당신이 그러한 파일을 읽고 있다면, 당신은 사용자 코드가 아닌 플랫폼의 빌트인 된 것들을 다루고 있다는 것을 알게 될 것이다.
 
 ### `target` setting
 
-The methods, properties, and functions available to you actually vary based on the *version* of JavaScript your code is running on.
-For example, the `startsWith` method of strings is available only starting with the version of JavaScript referred as *ECMAScript 6*.
+당신에게 제공되는 메소드, 프로퍼티, 그리고 함수는 당신의 코드가 실행되는 자바스크립트의 *버젼*에 따라 달라진다.
+에를 들어, 스티링의 `startsWith` 메소드는 *ECMAScript 6* 이후의 자바스크립트 버젼에서만 사용가능 하다.
 
-Being aware of what version of JavaScript your code ultimately runs on is important because you don't want to use APIs that are from a newer version than the platform you deploy to.
-This is one function of the `target` compiler setting.
+당신의 코드가 궁극적으로 어떤 버젼의 자바스크립트에서 실행될 것인가를 아는 것은 매우 중요한데, 코드가 배포될 플랫폼보다 새로운 버젼의 API를 사용하기를 원치 않을 것이기 때문이다.
+`target` 컴파일러 세팅의 주요한 기능중 하나가 이것이다.
 
-TypeScript helps with this problem by varying which `lib` files are included by default based on your `target` setting.
-For example, if `target` is `ES5`, you will see an error if trying to use the `startsWith` method, because that method is only available in `ES6` or later.
+타입스크립트는 이러한 문제를 다양한 `lib` 파일을 가지고 해결하는데 이 파일은 기본적으로 `target` 세팅에 따라 포함된다.
+예를 들어, `target` 이 `ES5` 이면, 만약 `startsWith` 메소드를 사용하려고 하면 당신은 에러를 보게 될 것이다, 왜냐하면 이 메소드는 `ES6` 이나 그 이후의 버젼에만 사용가능하기 때문이다.
 
 ### `lib` setting
 
-The `lib` setting allows more fine-grained control of which built-in declaration files are considered available in your program.
-See the documentation page on [[lib]] for more information.
+`lib` 세팅은 좀 더 세밀한 빌트인 선언을 제어 가능하게 해주는데 이것으로 당신의 프로그렘에서 사용할 수 있는지 고려할 수 있게 해준다.
+좀더 자세한 정보를 원하면 [[lib]] 문서 페이지를 보라.
 
 ## External Definitions
 
-For non-built-in APIs, there are a variety of ways you can get declaration files.
-How you do this depends on exactly which library you're getting types for.
+빌트인 API가 아닌 것들을 위해 당신 스스로 선언 파일을 작성하는 다양한 방법이 있다.
+어떤 방법을 사용할 것인가는 당신이 어떤 라리브러리를 사용하여 타입을 선언할 것인가에 달려 있다.
 
 ### Bundled Types
 
-If a library you're using is published as an npm package, it may include type declaration files as part of its distribution already.
-You can read the project's documentation to find out, or simply try importing the package and see if TypeScript is able to automatically resolve the types for you.
+만약 라이브러리가 npm 패키지로 발행된 것이라면, 배포본으로서 이미 타입 선언 파일을 이미 가지고 있을 것이다.
+당신의 프로젝트의 문서를 읽거나 단순히 패키지를 임포트 함으로써, 타입스크립트가 자동적으로 타입을 찾아내는지 보면 될 것이다.
 
-If you're a package author considering bundling type definitions with your package, you can read our guide on [[bundling type definitions]].
+만약 당신이 패키지 작성자이고 패키지 않에 타입선언을 함께 묶어서 제공하고 싶다면, 이 가이드를 읽어 보라 [[bundling type definitions]].
 
 ### DefinitelyTyped / `@types`
 
-The [DefinitelyTyped repository](https://github.com/DefinitelyTyped/DefinitelyTyped/) is a centralized repo storing declaration files for thousands of libraries.
-The vast majority of commonly-used libraries have declaration files available on DefinitelyTyped.
+[DefinitelyTyped repository](https://github.com/DefinitelyTyped/DefinitelyTyped/) 수천개의 라이브러리의 선언 파일을 갖고있는 중앙 집중적 저장소이다.
+광범위한 대다수의 공통적으로 사용되는 라이브러리들은 여기에서 선언 파일을 얻을 수 있다.
 
-Definitions on DefinitelyTyped are also automatically published to npm under the `@types` scope.
-The name of the types package is always the same as the name of the underlying package itself.
-For example, if you installed the `react` npm package, you can install its corresponding types by running
+DefinitelyTyped 에 있는 정의들은 자동적으로 npm에도 `@types` 스코프로 베포된다.
+타입 패키지의 이름은 항상 패키지 그 자체의 이름과 동일하다.
+예를 들어, `react` npm 패키지를 설치했다면, 당신의 이것에 해당하는 타입 파일을 다음의 명령으로 설치할 수 있다.
 
 ```sh
 npm install --save-dev @types/react
 ```
 
-TypeScript automatically finds type definitions under `node_modules/@types`, so there's no other step needed to get these types available in your program.
+타입스크립트는 타입 선언을 `node_modules/@types`에서 자동으로 찾는다, 따라서 이러한 타입을 당신의 프로그램에서 사용하기 위한 추가적 단계가 필요하지 않다.
 
 ### Your Own Definitions
 
-In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
-See the appendix [[Writing Declaration Files]] for a guide.
+라이브러리가 자신의 타입을 포함하고 있지 않는, 즉 DefinitelyTyped에도 타입이 없는 흔하지 않는 사건이 난 경우, 당신은 스스로 선언 파일을 작성할 수 있다.
+부록 [[Writing Declaration Files]] 에 가이드가 있다.
 
-If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type `any` by putting an empty declaration for it in a `.d.ts` file in your project.
-For example, if you wanted to use a module named `some-untyped-module` without having definitions for it, you would write:
+만약 특정 모듈이 선언파일이 없다는 경고를 끄고 싶다면, 당신의 프로젝트의 `.d.ts` 파일에 빈 선언을 넣고 모듈의 타입을 `any`로 선언함으로써 간편히 처리할 수 있다.
+예를 들어, `some-untyped-module`라는 모듈을 선언 파일 없이 사용하려면:
 
 ```ts
 declare module "some-untyped-module";
